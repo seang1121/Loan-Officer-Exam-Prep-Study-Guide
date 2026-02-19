@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NMLS MLO Exam Prep</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1729; --bg2: #1a2642; --bg3: #1e2d4a;
+  --accent: #f59e0b; --accent2: #d97706;
+  --text: #f1f5f9; --text2: #94a3b8;
+  --success: #22c55e; --danger: #ef4444;
+  --border: #2d3f5e; --radius: 12px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.app{max-width:800px;margin:0 auto;padding:0 0 80px}
+
+/* Header */
+.header{background:var(--bg2);border-bottom:1px solid var(--border);padding:16px 20px;position:sticky;top:0;z-index:100}
+.header h1{font-size:1.2rem;font-weight:700;color:var(--accent)}
+.header p{font-size:.75rem;color:var(--text2);margin-top:2px}
+
+/* Nav */
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100}
+nav button{flex:1;padding:10px 4px 14px;background:none;border:none;color:var(--text2);font-size:.65rem;font-family:inherit;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:.2s}
+nav button .icon{font-size:1.3rem}
+nav button.active{color:var(--accent)}
+nav button:hover{color:var(--text)}
+
+/* Tabs */
+.tab{display:none;padding:16px}
+.tab.active{display:block}
+
+/* Cards */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.card-sm{padding:12px}
+
+/* Buttons */
+.btn{display:inline-block;padding:10px 20px;border-radius:8px;border:none;font-family:inherit;font-size:.9rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-primary{background:var(--accent);color:#000}
+.btn-primary:hover{background:var(--accent2)}
+.btn-secondary{background:var(--bg2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent)}
+.btn-sm{padding:6px 14px;font-size:.8rem}
+.btn-block{display:block;width:100%;margin-bottom:8px;text-align:center}
+
+/* Dashboard */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
+.stat-num{font-size:1.6rem;font-weight:700;color:var(--accent)}
+.stat-label{font-size:.7rem;color:var(--text2);margin-top:2px}
+.quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.action-btn{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center;cursor:pointer;transition:.2s}
+.action-btn:hover{border-color:var(--accent);background:var(--bg2)}
+.action-btn .icon{font-size:1.5rem}
+.action-btn p{font-size:.8rem;color:var(--text2);margin-top:4px}
+.action-btn span{font-size:.9rem;font-weight:600}
+.score-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:600}
+.score-pass{background:rgba(34,197,94,.2);color:var(--success)}
+.score-fail{background:rgba(239,68,68,.2);color:var(--danger)}
+.score-none{background:rgba(148,163,184,.2);color:var(--text2)}
+
+/* Flashcards */
+.deck-select{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.deck-btn{padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text2);font-size:.8rem;cursor:pointer;font-family:inherit;transition:.2s}
+.deck-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.fc-container{perspective:1000px;margin-bottom:16px}
+.fc-card{width:100%;min-height:220px;position:relative;transform-style:preserve-3d;transition:transform .5s;cursor:pointer}
+.fc-card.flipped{transform:rotateY(180deg)}
+.fc-front,.fc-back{position:absolute;width:100%;min-height:220px;backface-visibility:hidden;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.fc-back{transform:rotateY(180deg);background:var(--bg2)}
+.fc-label{font-size:.7rem;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.05em}
+.fc-text{font-size:1rem;font-weight:600;line-height:1.5}
+.fc-back .fc-text{color:var(--accent)}
+.fc-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.fc-counter{font-size:.85rem;color:var(--text2)}
+.fc-progress{height:4px;background:var(--bg3);border-radius:2px;margin-bottom:16px}
+.fc-progress-bar{height:4px;background:var(--accent);border-radius:2px;transition:width .3s}
+.fc-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn-know{background:rgba(34,197,94,.2);color:var(--success);border:1px solid var(--success)}
+.btn-know:hover{background:rgba(34,197,94,.3)}
+.btn-review{background:rgba(239,68,68,.2);color:var(--danger);border:1px solid var(--danger)}
+.btn-review:hover{background:rgba(239,68,68,.3)}
+.fc-stats{display:flex;gap:12px;font-size:.8rem;margin-bottom:12px}
+.fc-stats span{padding:4px 10px;border-radius:20px}
+
+/* Quiz */
+.quiz-setup{text-align:center}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.quiz-opt{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;cursor:pointer;transition:.2s;font-size:.85rem;text-align:center}
+.quiz-opt:hover,.quiz-opt.selected{border-color:var(--accent);color:var(--accent)}
+.quiz-domain{font-size:.75rem;color:var(--accent);margin-bottom:8px}
+.quiz-q{font-size:1rem;font-weight:600;line-height:1.5;margin-bottom:16px}
+.quiz-answers{display:flex;flex-direction:column;gap:8px}
+.ans-btn{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:left;cursor:pointer;font-family:inherit;font-size:.9rem;color:var(--text);transition:.2s;display:flex;gap:10px;align-items:flex-start}
+.ans-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.ans-btn.correct{background:rgba(34,197,94,.15);border-color:var(--success);color:var(--success)}
+.ans-btn.wrong{background:rgba(239,68,68,.15);border-color:var(--danger);color:var(--danger)}
+.ans-btn:disabled{cursor:default}
+.ans-letter{font-weight:700;min-width:20px;color:var(--accent)}
+.ans-btn.correct .ans-letter,.ans-btn.wrong .ans-letter{color:inherit}
+.explanation{background:var(--bg2);border-left:3px solid var(--accent);padding:12px;border-radius:0 8px 8px 0;font-size:.85rem;line-height:1.5;margin-top:12px;color:var(--text2)}
+.quiz-footer{display:flex;justify-content:space-between;align-items:center;margin-top:16px}
+.quiz-progress{font-size:.85rem;color:var(--text2)}
+.results-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}
+.result-box{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center}
+.result-num{font-size:1.4rem;font-weight:700}
+.result-label{font-size:.75rem;color:var(--text2);margin-top:2px}
+.big-score{font-size:3rem;font-weight:700;text-align:center;padding:20px 0}
+.score-pass-big{color:var(--success)}
+.score-fail-big{color:var(--danger)}
+
+/* Scenarios */
+.section-filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--text2);font-size:.75rem;cursor:pointer;font-family:inherit;transition:.2s}
+.filter-btn.active{background:var(--accent);color:#000;border-color:var(--accent)}
+.scenario-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+.scenario-header{padding:14px;cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+.scenario-badge{padding:2px 8px;border-radius:20px;font-size:.7rem;font-weight:600;white-space:nowrap;flex-shrink:0}
+.badge-a{background:rgba(59,130,246,.2);color:#60a5fa}
+.badge-b{background:rgba(168,85,247,.2);color:#c084fc}
+.badge-c{background:rgba(20,184,166,.2);color:#2dd4bf}
+.badge-d{background:rgba(239,68,68,.2);color:#f87171}
+.badge-e{background:rgba(245,158,11,.2);color:#fbbf24}
+.scenario-num{font-size:.75rem;color:var(--text2);white-space:nowrap;flex-shrink:0}
+.scenario-text{font-size:.85rem;line-height:1.5;flex:1}
+.scenario-answer{background:var(--bg2);padding:14px;border-top:1px solid var(--border);display:none}
+.scenario-answer.open{display:block}
+.answer-correct{font-weight:700;color:var(--success);margin-bottom:6px;font-size:.85rem}
+.answer-explain{font-size:.82rem;line-height:1.5;color:var(--text2)}
+.scenario-opts{display:flex;flex-direction:column;gap:4px;margin:8px 0}
+.s-opt{font-size:.82rem;padding:4px 0;color:var(--text2)}
+.s-opt.correct-opt{color:var(--success);font-weight:600}
+.reveal-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 12px;font-size:.75rem;color:var(--text2);cursor:pointer;margin-top:8px;font-family:inherit;transition:.2s}
+.reveal-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+/* Study Guide */
+.session-grid{display:grid;gap:8px}
+.session-item{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;gap:12px;align-items:center}
+.session-num{font-size:1.1rem;font-weight:700;color:var(--accent);min-width:36px;text-align:center}
+.session-info h3{font-size:.9rem;font-weight:600}
+.session-info p{font-size:.75rem;color:var(--text2);margin-top:2px}
+.domain-tag{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:600;margin-top:4px}
+.d1{background:rgba(59,130,246,.2);color:#60a5fa}
+.d2{background:rgba(245,158,11,.2);color:#fbbf24}
+.d3{background:rgba(20,184,166,.2);color:#2dd4bf}
+.d4{background:rgba(168,85,247,.2);color:#c084fc}
+.d5{background:rgba(239,68,68,.2);color:#f87171}
+
+/* Utilities */
+.text-accent{color:var(--accent)}
+.text-sm{font-size:.8rem}
+.text-xs{font-size:.75rem}
+.text-muted{color:var(--text2)}
+.mb-8{margin-bottom:8px}
+.mb-12{margin-bottom:12px}
+.mb-16{margin-bottom:16px}
+.flex{display:flex}
+.flex-between{display:flex;justify-content:space-between;align-items:center}
+h2{font-size:1.1rem;font-weight:700;margin-bottom:12px}
+h3{font-size:.95rem;font-weight:600}
+.divider{height:1px;background:var(--border);margin:16px 0}
+progress-bar-wrap{height:4px;background:var(--bg3);border-radius:2px;margin-bottom:16px}
+.pbar{height:4px;background:var(--accent);border-radius:2px;transition:width .3s}
+.pbar-wrap{height:4px;background:var(--bg3);border-radius:2px;margin-bottom:16px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🦞 NMLS MLO Exam Prep</h1>
+    <p>120 Questions &nbsp;·&nbsp; 190 Minutes &nbsp;·&nbsp; 75% to Pass (86/115 scored)</p>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div id="tab-home" class="tab active">
+    <div style="padding:16px">
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-num">16</div><div class="stat-label">Sessions</div></div>
+        <div class="stat-box"><div class="stat-num">3</div><div class="stat-label">Practice Tests</div></div>
+        <div class="stat-box"><div class="stat-num">60</div><div class="stat-label">Scenarios</div></div>
+        <div class="stat-box"><div class="stat-num">4</div><div class="stat-label">Flashcard Decks</div></div>
+      </div>
+      <div class="quick-actions">
+        <div class="action-btn" onclick="switchTab('quiz')"><div class="icon">✅</div><span>Practice Quiz</span><p>60 questions</p></div>
+        <div class="action-btn" onclick="switchTab('flash')"><div class="icon">🃏</div><span>Flashcards</span><p>4 decks</p></div>
+        <div class="action-btn" onclick="switchTab('scenarios')"><div class="icon">🎯</div><span>Scenarios</span><p>60 situations</p></div>
+        <div class="action-btn" onclick="switchTab('guide')"><div class="icon">📚</div><span>Study Guide</span><p>16 sessions</p></div>
+      </div>
+      <div class="card">
+        <div class="flex-between mb-8"><h3>Your Progress</h3><button class="btn btn-secondary btn-sm" onclick="clearProgress()">Reset</button></div>
+        <div id="progress-display"></div>
+      </div>
+      <div class="card">
+        <h3 class="mb-8">📋 Exam Domain Weights</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div><div class="flex-between text-sm mb-8"><span>Domain 1: Federal Laws</span><span class="text-accent">24% (~28 q)</span></div><div class="pbar-wrap"><div class="pbar" style="width:24%"></div></div></div>
+          <div><div class="flex-between text-sm mb-8"><span>Domain 4: Origination Activities</span><span class="text-accent">27% (~31 q)</span></div><div class="pbar-wrap"><div class="pbar" style="width:27%"></div></div></div>
+          <div><div class="flex-between text-sm mb-8"><span>Domain 3: General Mortgage</span><span class="text-accent">20% (~23 q)</span></div><div class="pbar-wrap"><div class="pbar" style="width:20%"></div></div></div>
+          <div><div class="flex-between text-sm mb-8"><span>Domain 5: Ethics</span><span class="text-accent">18% (~21 q)</span></div><div class="pbar-wrap"><div class="pbar" style="width:18%"></div></div></div>
+          <div><div class="flex-between text-sm mb-8"><span>Domain 2: State Content</span><span class="text-accent">11% (~13 q)</span></div><div class="pbar-wrap"><div class="pbar" style="width:11%"></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLASHCARDS -->
+  <div id="tab-flash" class="tab">
+    <div style="padding:16px">
+      <h2>🃏 Flashcards</h2>
+      <div class="deck-select" id="deck-btns"></div>
+      <div class="fc-stats"><span id="fc-known" class="score-pass">0 known</span><span id="fc-left" class="score-none">0 left</span></div>
+      <div class="pbar-wrap"><div class="pbar" id="fc-pbar" style="width:0%"></div></div>
+      <div class="fc-container" onclick="flipCard()">
+        <div class="fc-card" id="fc-card">
+          <div class="fc-front"><div class="fc-label">Question — tap to flip</div><div class="fc-text" id="fc-front-text">Loading...</div></div>
+          <div class="fc-back"><div class="fc-label">Answer</div><div class="fc-text" id="fc-back-text"></div></div>
+        </div>
+      </div>
+      <div class="fc-nav">
+        <button class="btn btn-secondary btn-sm" onclick="fcNav(-1)">← Prev</button>
+        <span class="fc-counter" id="fc-counter">1 / 1</span>
+        <button class="btn btn-secondary btn-sm" onclick="fcNav(1)">Next →</button>
+      </div>
+      <div class="fc-actions">
+        <button class="btn btn-know btn-sm" onclick="markCard(true)">✓ Know It</button>
+        <button class="btn btn-review btn-sm" onclick="markCard(false)">✗ Review Again</button>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="btn btn-secondary btn-sm" onclick="shuffleDeck()" style="flex:1">🔀 Shuffle</button>
+        <button class="btn btn-secondary btn-sm" onclick="resetDeck()" style="flex:1">↺ Reset Deck</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="tab-quiz" class="tab">
+    <div style="padding:16px">
+      <div id="quiz-setup-view">
+        <h2>✅ Practice Quiz</h2>
+        <p class="text-muted text-sm mb-12">Test yourself with real exam-style questions. Get instant feedback and explanations.</p>
+        <div class="quiz-options" id="quiz-options">
+          <div class="quiz-opt selected" onclick="selectQuizMode(this,'all')" data-mode="all">📋 All 60 Questions</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'25')" data-mode="25">⚡ Quick 25</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'d1')" data-mode="d1">⚖️ Federal Laws</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'d2')" data-mode="d2">🪪 State Content</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'d3')" data-mode="d3">🏠 Mortgage Knowledge</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'d4')" data-mode="d4">📝 Origination</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'d5')" data-mode="d5">⚡ Ethics</div>
+          <div class="quiz-opt" onclick="selectQuizMode(this,'wrong')" data-mode="wrong">🔁 Review Wrong Answers</div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="startQuiz()">Start Quiz →</button>
+        <div id="past-scores" class="card" style="margin-top:12px"></div>
+      </div>
+      <div id="quiz-active-view" style="display:none">
+        <div class="flex-between mb-12">
+          <span class="quiz-progress" id="quiz-prog">Q 1 of 60</span>
+          <button class="btn btn-secondary btn-sm" onclick="endQuiz()">✕ End</button>
+        </div>
+        <div class="pbar-wrap"><div class="pbar" id="quiz-pbar" style="width:0%"></div></div>
+        <div class="quiz-domain" id="quiz-domain"></div>
+        <div class="quiz-q" id="quiz-q"></div>
+        <div class="quiz-answers" id="quiz-answers"></div>
+        <div id="quiz-explanation" style="display:none" class="explanation"></div>
+        <div class="quiz-footer">
+          <span id="quiz-score-live" class="text-sm text-muted"></span>
+          <button id="quiz-next-btn" class="btn btn-primary btn-sm" onclick="nextQuestion()" style="display:none">Next →</button>
+        </div>
+      </div>
+      <div id="quiz-results-view" style="display:none">
+        <h2 style="text-align:center">Quiz Complete!</h2>
+        <div id="big-score" class="big-score"></div>
+        <div class="results-grid" id="results-grid"></div>
+        <div id="domain-breakdown" class="card mb-12"></div>
+        <button class="btn btn-primary btn-block" onclick="showSetup()">Take Another Quiz</button>
+        <button class="btn btn-secondary btn-block" onclick="reviewWrong()">🔁 Review Wrong Answers</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div id="tab-scenarios" class="tab">
+    <div style="padding:16px">
+      <h2>🎯 Scenario Bank</h2>
+      <p class="text-muted text-sm mb-12">60 real-world MLO situations. Apply your knowledge, not just recall.</p>
+      <div class="section-filters" id="scenario-filters">
+        <button class="filter-btn active" onclick="filterScenarios('all',this)">All (60)</button>
+        <button class="filter-btn" onclick="filterScenarios('A',this)">⚖️ Compliance (15)</button>
+        <button class="filter-btn" onclick="filterScenarios('B',this)">📋 TRID (12)</button>
+        <button class="filter-btn" onclick="filterScenarios('C',this)">🏠 Underwriting (12)</button>
+        <button class="filter-btn" onclick="filterScenarios('D',this)">⚡ Ethics (11)</button>
+        <button class="filter-btn" onclick="filterScenarios('E',this)">🪪 Licensing (10)</button>
+      </div>
+      <div id="scenario-list"></div>
+    </div>
+  </div>
+
+  <!-- STUDY GUIDE -->
+  <div id="tab-guide" class="tab">
+    <div style="padding:16px">
+      <h2>📚 Study Guide</h2>
+      <p class="text-muted text-sm mb-12">All 16 sessions mapped to exam domains. Full content on GitHub.</p>
+      <div class="session-grid" id="session-list"></div>
+      <div class="divider"></div>
+      <div class="card">
+        <h3 class="mb-8">📖 Full Course on GitHub</h3>
+        <p class="text-sm text-muted mb-12">All session notes, flashcards, and practice tests are in the repo with full detail.</p>
+        <a href="https://github.com/seang1121/Loan-Officer-Exam-Prep-Study-Guide" target="_blank" class="btn btn-secondary btn-sm">View on GitHub →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bottom Nav -->
+<nav>
+  <button class="active" onclick="switchTab('home')" id="nav-home"><span class="icon">🏠</span>Home</button>
+  <button onclick="switchTab('flash')" id="nav-flash"><span class="icon">🃏</span>Flashcards</button>
+  <button onclick="switchTab('quiz')" id="nav-quiz"><span class="icon">✅</span>Quiz</button>
+  <button onclick="switchTab('scenarios')" id="nav-scenarios"><span class="icon">🎯</span>Scenarios</button>
+  <button onclick="switchTab('guide')" id="nav-guide"><span class="icon">📚</span>Guide</button>
+</nav>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const flashcardDecks = {
+  "Key Numbers": [
+    {front:"How many business days after application must the Loan Estimate be delivered?",back:"3 business days"},
+    {front:"How many business days before closing must the Closing Disclosure be received?",back:"3 business days (Saturday counts as a business day)"},
+    {front:"What is the standard right of rescission period on a refinance?",back:"3 business days after consummation"},
+    {front:"What is the extended right of rescission period when disclosures are missing?",back:"Up to 3 years"},
+    {front:"ECOA adverse action notice — how many days?",back:"Within 30 days of application decision"},
+    {front:"SAR filing deadline?",back:"Within 30 days of detecting suspicious activity"},
+    {front:"CTR filing deadline?",back:"Within 15 days of the cash transaction"},
+    {front:"CTR cash threshold?",back:"$10,000 (any cash transaction at or above this amount)"},
+    {front:"SAR dollar threshold for suspected illegal activity?",back:"$5,000"},
+    {front:"HMDA LAR annual filing deadline?",back:"March 1 of the following calendar year"},
+    {front:"NMLS self-report deadline for criminal convictions or financial events?",back:"Within 30 days of the event"},
+    {front:"Pre-licensing education: total hours required?",back:"20 hours"},
+    {front:"Pre-licensing: federal law hours?",back:"3 hours"},
+    {front:"Pre-licensing: ethics hours?",back:"3 hours"},
+    {front:"Pre-licensing: non-traditional mortgage products hours?",back:"2 hours"},
+    {front:"Annual CE: total hours?",back:"8 hours"},
+    {front:"Annual CE breakdown?",back:"3 hrs federal law, 2 hrs ethics, 2 hrs non-traditional products, 1 hr elective"},
+    {front:"SAFE exam passing score?",back:"75% or higher"},
+    {front:"How long to wait after 3rd SAFE exam failure?",back:"180 days (6 months)"},
+    {front:"HPML first-lien APR threshold?",back:"APR ≥ 1.5% above APOR"},
+    {front:"HPML subordinate lien APR threshold?",back:"APR ≥ 3.5% above APOR"},
+    {front:"HOEPA/High-Cost first-lien APR threshold?",back:"APR ≥ 6.5% above APOR"},
+    {front:"HOEPA points & fees trigger?",back:"Points and fees ≥ 5% of the loan amount (or $1,000, whichever is greater)"},
+    {front:"TRID APR tolerance — regular loan?",back:"0.125%"},
+    {front:"TRID APR tolerance — irregular loan?",back:"0.25%"},
+    {front:"TRID zero-tolerance fees?",back:"Origination charges — cannot increase at all from LE to CD"},
+    {front:"TRID 10% aggregate tolerance category includes?",back:"Required third-party services where borrower chose from lender's list, recording fees"},
+    {front:"RESPA max escrow cushion?",back:"1/6 of estimated annual disbursements (~2 months)"},
+    {front:"RESPA escrow surplus refund threshold?",back:"$50 — lender must refund if surplus exceeds $50"},
+    {front:"PMI automatic termination at what LTV (original amortization)?",back:"78% LTV — Homeowners Protection Act"},
+    {front:"PMI borrower cancellation request at what LTV?",back:"80% LTV"},
+    {front:"FHA upfront MIP (UFMIP)?",back:"1.75% of base loan amount"},
+    {front:"VA funding fee — first use, 0% down?",back:"2.15%"},
+    {front:"USDA upfront guarantee fee?",back:"1% of loan amount"},
+    {front:"USDA annual fee?",back:"0.35% of outstanding balance"},
+    {front:"2024 conforming loan limit (1-unit)?",back:"$766,550"},
+    {front:"Total NMLS exam questions?",back:"120 total (115 scored + 5 unscored)"},
+    {front:"NMLS exam time limit?",back:"190 minutes"},
+    {front:"NMLS exam passing score (# of questions)?",back:"86 out of 115 scored questions (75%)"},
+    {front:"Fair Housing Act — how many protected classes?",back:"7: Race, Color, National Origin, Religion, Sex, Familial Status, Disability"},
+    {front:"ECOA — additional protected classes beyond Fair Housing?",back:"Age, Marital Status, Receipt of Public Assistance Income, Exercise of Consumer Rights"},
+    {front:"HPML mandatory escrow period?",back:"5 years"},
+    {front:"TRID cure deadline after tolerance violation?",back:"Within 60 calendar days of settlement"},
+    {front:"Conventional conforming loan — max LTV without PMI?",back:"80% LTV"},
+    {front:"FHA minimum down payment?",back:"3.5% (for borrowers with 580+ credit score)"}
+  ],
+  "Acronyms": [
+    {front:"TILA",back:"Truth in Lending Act — requires APR and cost-of-credit disclosures to borrowers"},
+    {front:"RESPA",back:"Real Estate Settlement Procedures Act — prohibits kickbacks; regulates settlement procedures"},
+    {front:"ECOA",back:"Equal Credit Opportunity Act — prohibits credit discrimination (9+ protected classes)"},
+    {front:"HMDA",back:"Home Mortgage Disclosure Act — requires mortgage data reporting to detect redlining"},
+    {front:"FCRA",back:"Fair Credit Reporting Act — governs credit report use and dispute rights"},
+    {front:"BSA",back:"Bank Secrecy Act — anti-money laundering; requires CTR and SAR filings"},
+    {front:"HOEPA",back:"Home Ownership and Equity Protection Act — high-cost mortgage restrictions"},
+    {front:"TRID",back:"TILA-RESPA Integrated Disclosure Rule — 'Know Before You Owe'; governs LE and CD"},
+    {front:"CFPB",back:"Consumer Financial Protection Bureau — enforces federal consumer financial laws (created by Dodd-Frank)"},
+    {front:"FNMA / Fannie Mae",back:"Federal National Mortgage Association — buys conventional conforming loans in the secondary market"},
+    {front:"FHLMC / Freddie Mac",back:"Federal Home Loan Mortgage Corporation — buys conventional conforming loans"},
+    {front:"GNMA / Ginnie Mae",back:"Government National Mortgage Association — guarantees MBS backed by FHA/VA/USDA loans"},
+    {front:"FHFA",back:"Federal Housing Finance Agency — regulates Fannie Mae, Freddie Mac, and FHLBs"},
+    {front:"NMLS",back:"Nationwide Multistate Licensing System — centralized licensing and registration for all MLOs"},
+    {front:"LE",back:"Loan Estimate — 3-page TRID disclosure replacing the GFE; due within 3 business days of application"},
+    {front:"CD",back:"Closing Disclosure — 5-page TRID disclosure replacing HUD-1; due 3 business days before closing"},
+    {front:"GFE",back:"Good Faith Estimate — old pre-TRID disclosure replaced by the Loan Estimate in 2015"},
+    {front:"AfBA",back:"Affiliated Business Arrangement — referral to a company with ownership tie; requires written disclosure at time of referral"},
+    {front:"APR",back:"Annual Percentage Rate — the interest rate plus finance charges expressed annually; true cost of credit"},
+    {front:"APOR",back:"Average Prime Offer Rate — benchmark rate published by CFPB; used to determine HPML and HOEPA thresholds"},
+    {front:"HPML",back:"Higher-Priced Mortgage Loan — first-lien APR ≥ 1.5% above APOR; requires mandatory escrow (5 yrs) + appraisal"},
+    {front:"DTI",back:"Debt-to-Income Ratio — monthly debt payments ÷ gross monthly income"},
+    {front:"LTV",back:"Loan-to-Value Ratio — loan amount ÷ appraised or purchase value (lesser of the two)"},
+    {front:"CLTV",back:"Combined Loan-to-Value — all liens ÷ appraised value"},
+    {front:"PITI",back:"Principal, Interest, Taxes, Insurance — the four components of a monthly mortgage payment"},
+    {front:"AUS",back:"Automated Underwriting System — software that evaluates loan applications (DU, LPA, GUS)"},
+    {front:"DU",back:"Desktop Underwriter — Fannie Mae's AUS; returns Approve/Eligible, Refer, or Refer with Caution"},
+    {front:"LPA",back:"Loan Product Advisor — Freddie Mac's AUS (formerly Loan Prospector)"},
+    {front:"GUS",back:"Guaranteed Underwriting System — USDA's AUS"},
+    {front:"CTR",back:"Currency Transaction Report — filed for cash transactions over $10,000; due within 15 days"},
+    {front:"SAR",back:"Suspicious Activity Report — filed for suspected illegal activity ($5,000+); due within 30 days"},
+    {front:"QM",back:"Qualified Mortgage — meets ATR standards; provides safe harbor for lenders from ATR liability"},
+    {front:"ATR",back:"Ability to Repay — Dodd-Frank rule requiring lenders to verify borrower can repay before originating a mortgage"},
+    {front:"AIR",back:"Appraiser Independence Requirements — prohibits MLOs from pressuring appraisers to reach a target value"},
+    {front:"AMC",back:"Appraisal Management Company — manages appraiser selection to create independence from lenders"},
+    {front:"URLA",back:"Uniform Residential Loan Application — standard mortgage application (Form 1003)"},
+    {front:"VOE",back:"Verification of Employment — document confirming borrower's employer, position, income, and tenure"},
+    {front:"MIP",back:"Mortgage Insurance Premium — insurance required on FHA loans (UFMIP + annual MIP)"},
+    {front:"UFMIP",back:"Upfront Mortgage Insurance Premium — FHA one-time fee of 1.75% of the base loan amount"},
+    {front:"PMI",back:"Private Mortgage Insurance — required on conventional loans with LTV > 80%; cancelled at 78% LTV (HPA)"},
+    {front:"HECM",back:"Home Equity Conversion Mortgage — FHA-insured reverse mortgage for borrowers 62+"},
+    {front:"IRRRL",back:"Interest Rate Reduction Refinance Loan — VA streamline refinance (VA-to-VA only)"},
+    {front:"GSE",back:"Government-Sponsored Enterprise — Fannie Mae and Freddie Mac"},
+    {front:"MBS",back:"Mortgage-Backed Securities — pools of mortgages sold as investment instruments"},
+    {front:"MSR",back:"Mortgage Servicing Rights — the right to collect payments and service a loan"},
+    {front:"LAR",back:"Loan Application Register — HMDA annual data file filed by March 1"},
+    {front:"SFHA",back:"Special Flood Hazard Area — FEMA flood zone requiring mandatory flood insurance on federally backed mortgages"},
+    {front:"NFIP",back:"National Flood Insurance Program — federal flood insurance program"},
+    {front:"SDN",back:"Specially Designated Nationals — OFAC list of sanctioned persons/entities MLOs must screen against"},
+    {front:"CIP",back:"Customer Identification Program — PATRIOT Act requirement to verify borrower identity"}
+  ],
+  "Laws & Regulations": [
+    {front:"What does RESPA Section 8 prohibit?",back:"Paying or receiving any fee, kickback, or thing of value in exchange for referrals of settlement service business. No de minimis exception."},
+    {front:"What does RESPA Section 9 prohibit?",back:"Sellers requiring buyers to use a specific title insurance company as a condition of sale."},
+    {front:"What does RESPA Section 10 regulate?",back:"Escrow accounts — limits cushion to 1/6 of annual disbursements; requires annual analysis."},
+    {front:"ECOA adverse action notice — what must it include?",back:"Notice of the action taken, the reasons for the denial or right to request reasons, and the ECOA notice."},
+    {front:"FCRA — how long does a CRA have to investigate a dispute?",back:"30 days (extended to 45 days if the consumer submits additional information)"},
+    {front:"HMDA — who must report?",back:"Covered institutions (banks, credit unions, non-bank lenders) that meet certain loan volume thresholds and are in metropolitan areas."},
+    {front:"BSA — what is 'structuring'?",back:"Intentionally breaking up cash transactions to avoid the $10,000 CTR reporting requirement — a federal crime."},
+    {front:"Fair Housing Act — what does it prohibit in lending?",back:"Discrimination in residential real estate transactions (sale, rental, lending) based on 7 protected classes."},
+    {front:"SAFE Act — what did it create?",back:"The NMLS — Nationwide Multistate Licensing System. Required all MLOs to either register (bank) or obtain state licenses (non-bank)."},
+    {front:"Dodd-Frank ATR Rule — what must lenders verify?",back:"8 factors: income, employment, assets, debt obligations, credit history, monthly payment, simultaneous loan payments, mortgage-related obligations."},
+    {front:"LO Compensation Rule — what is prohibited?",back:"MLO compensation based on any loan term (rate, APR, points, LTV). Dual compensation (borrower + lender) is also prohibited."},
+    {front:"HOEPA — what is prohibited on high-cost loans?",back:"Balloon payments (first 10 years), negative amortization, prepayment penalties, loan flipping, and asset-based lending."},
+    {front:"AIR — Appraisal Independence Requirements — who is covered?",back:"Anyone with an interest in the transaction. MLOs, processors, real estate agents cannot pressure appraisers to reach a target value."},
+    {front:"GLBA — what does it require?",back:"Financial institutions must provide annual privacy notices explaining how nonpublic personal information is collected and shared, with opt-out rights."},
+    {front:"SCRA — Servicemembers Civil Relief Act — what does it protect?",back:"Active-duty military from foreclosure without court order; caps mortgage interest at 6% during active duty."},
+    {front:"CRA — Community Reinvestment Act — what does it require?",back:"Banks must demonstrate they are meeting the credit needs of their entire community, including low- and moderate-income areas."},
+    {front:"HPA — Homeowners Protection Act — what does it require?",back:"Automatic PMI cancellation at 78% LTV (original amortization); lender must cancel on request at 80% LTV."},
+    {front:"FCRA — how long does negative credit info stay on a report?",back:"7 years for most negative items; 10 years for Chapter 7 bankruptcy."},
+    {front:"TILA right of rescission — when does it apply?",back:"Refinances and home equity loans/HELOCs on a primary residence. Does NOT apply to purchase transactions."},
+    {front:"Dodd-Frank — what agency did it create?",back:"The Consumer Financial Protection Bureau (CFPB), which enforces most federal consumer financial protection laws."}
+  ],
+  "Protected Classes": [
+    {front:"Name the 7 Fair Housing Act protected classes",back:"1. Race\n2. Color\n3. National Origin\n4. Religion\n5. Sex\n6. Familial Status\n7. Disability (Handicap)"},
+    {front:"What is 'familial status' under the Fair Housing Act?",back:"Families with children under 18 (including pregnant women and people seeking legal custody of a minor)"},
+    {front:"ECOA adds which protected classes beyond the Fair Housing Act?",back:"Age, Marital Status, Receipt of Public Assistance Income, Exercise of Consumer Protection Rights"},
+    {front:"Is 'marital status' a Fair Housing or ECOA protected class?",back:"ECOA only — not the Fair Housing Act"},
+    {front:"Is 'age' a Fair Housing or ECOA protected class?",back:"ECOA only — not the Fair Housing Act"},
+    {front:"Can a lender ask a borrower's religion?",back:"No — religion is a protected class under both the Fair Housing Act and ECOA. Asking implies it may be used in the credit decision."},
+    {front:"What is 'disparate treatment'?",back:"Intentionally treating an applicant differently based on a protected class characteristic. Intent IS required."},
+    {front:"What is 'disparate impact'?",back:"A facially neutral policy that disproportionately harms a protected class. Intent is NOT required."},
+    {front:"What is 'redlining'?",back:"Refusing to make loans in specific geographic areas based on the racial or ethnic composition of those areas."},
+    {front:"What is 'reverse redlining'?",back:"Targeting minority communities with predatory, subprime, or abusive loan products."},
+    {front:"What is 'steering'?",back:"Directing a borrower to a loan product that is not in their best interest — often to products that generate higher commission for the MLO."},
+    {front:"Under ECOA, can a lender ask about a spouse's income?",back:"Only if the spouse will be contractually liable on the loan OR if the applicant is relying on the spouse's income to qualify."},
+    {front:"ECOA — can a lender require an applicant to disclose alimony/child support?",back:"No — lender cannot require disclosure; borrower may voluntarily provide it as qualifying income."},
+    {front:"What is the ECOA adverse action notice timeframe?",back:"Within 30 days of receiving a completed application — for approval, denial, counteroffer, or incomplete notice."},
+    {front:"What government monitoring info must be collected under HMDA?",back:"Race/ethnicity, sex, and age of applicants — for fair lending analysis. Cannot be used in credit decisions."},
+    {front:"Does the Fair Housing Act cover commercial properties?",back:"No — Fair Housing Act covers residential dwellings (1-4 units, some condos, mobile homes). ECOA covers all credit."},
+    {front:"What is 'blockbusting'?",back:"Inducing homeowners to sell by suggesting that property values will decline because of the racial/ethnic composition of the neighborhood changing."},
+    {front:"Can a lender set a minimum loan amount?",back:"Yes, but only if it is applied uniformly and doesn't create a disparate impact on protected classes."},
+    {front:"What law allows disabled borrowers to request reasonable accommodations?",back:"The Fair Housing Act — lenders must consider reasonable accommodation requests (e.g., alternative document formats, meeting locations)."},
+    {front:"HMDA monitoring data — what happens if applicant refuses to provide it (face-to-face)?",back:"Lender must collect by visual observation and/or surname and note that the applicant did not provide the information."}
+  ]
+};
+
+const quizData = [
+  // Domain 1: Federal Laws (18 questions)
+  {id:1,domain:1,dn:"Federal Laws",q:"Under RESPA Section 8, which of the following IS permitted?",opts:{A:"Paying a real estate agent $200 per mortgage referral",B:"Compensating a settlement service provider for services actually performed",C:"Accepting a free vacation from a title company for referrals",D:"Splitting an escrow fee with no service rendered"},correct:"B",exp:"RESPA §8 allows compensation for legitimate services actually performed. Pure referral fees with no services rendered are prohibited."},
+  {id:2,domain:1,dn:"Federal Laws",q:"Which event triggers the extended 3-year right of rescission under TILA?",opts:{A:"The interest rate increases more than 0.125% between LE and CD",B:"The lender failed to deliver required TILA disclosures",C:"The borrower did not sign the rescission notice",D:"The closing was delayed more than 60 days"},correct:"B",exp:"Extended rescission up to 3 years applies when the lender fails to properly deliver required TILA disclosures to the borrower."},
+  {id:3,domain:1,dn:"Federal Laws",q:"Under ECOA, when a lender makes a counteroffer, how many days does the borrower have to accept before an adverse action notice is required?",opts:{A:"30 days",B:"60 days",C:"90 days",D:"120 days"},correct:"C",exp:"Under ECOA, a counteroffer is open for 90 days. If the borrower does not accept within 90 days, the lender must send an adverse action notice."},
+  {id:4,domain:1,dn:"Federal Laws",q:"What is the threshold for filing a Currency Transaction Report (CTR) under the Bank Secrecy Act?",opts:{A:"$5,000",B:"$7,500",C:"$10,000",D:"$25,000"},correct:"C",exp:"CTRs are required for cash transactions of $10,000 or more. SARs are for suspected illegal activity of $5,000+."},
+  {id:5,domain:1,dn:"Federal Laws",q:"An MLO's APR on the LE is 6.00%. The APR on the CD is 6.14%. What must happen on a regular fixed-rate loan?",opts:{A:"Nothing — within tolerance",B:"Issue revised LE and restart 3-business-day waiting period",C:"Borrower must waive the discrepancy in writing",D:"The loan must be cancelled"},correct:"B",exp:"The APR tolerance for regular loans is 0.125%. A change from 6.00% to 6.14% (0.14%) exceeds tolerance, requiring a revised LE and a new 3-business-day wait."},
+  {id:6,domain:1,dn:"Federal Laws",q:"Which of the following is NOT a finance charge under TILA?",opts:{A:"Mortgage broker origination fee",B:"Discount points paid to reduce the rate",C:"Appraisal fee (borrower shops and pays third-party appraiser)",D:"Prepaid mortgage insurance premium"},correct:"C",exp:"Appraisal fees paid to independent third parties when the borrower can shop are excluded finance charges. Origination fees, discount points, and MIP are all finance charges."},
+  {id:7,domain:1,dn:"Federal Laws",q:"An AfBA (Affiliated Business Arrangement) disclosure must be given:",opts:{A:"At loan closing",B:"At the time of the referral to the affiliated company",C:"Within 3 business days of application",D:"Only if the borrower requests it"},correct:"B",exp:"The AfBA disclosure must be provided at the time of the referral — not at application, not at closing. Timing is key."},
+  {id:8,domain:1,dn:"Federal Laws",q:"A mortgage broker receives cash from a client and suggests splitting it into two smaller payments to avoid a CTR. This is:",opts:{A:"Acceptable if neither payment exceeds $10,000",B:"A BSA violation known as 'structuring'",C:"Acceptable if documented in the file",D:"Required by anti-money laundering rules"},correct:"B",exp:"Intentionally structuring transactions to avoid CTR reporting thresholds is 'structuring' — a federal crime under the Bank Secrecy Act, regardless of whether the funds are legitimate."},
+  {id:9,domain:1,dn:"Federal Laws",q:"HMDA requires covered lenders to collect data on all of the following EXCEPT:",opts:{A:"Race and ethnicity of the applicant",B:"Loan purpose (purchase, refinance, home improvement)",C:"The MLO's compensation on the loan",D:"The applicant's income"},correct:"C",exp:"HMDA collects demographic and loan data for fair lending analysis. It does not require disclosure of MLO compensation."},
+  {id:10,domain:1,dn:"Federal Laws",q:"Under the Ability-to-Repay (ATR) rule, a lender must verify the borrower's:",opts:{A:"Investment portfolio value",B:"Ability to repay based on income, assets, and current obligations",C:"FICO score only",D:"Whether the property will appreciate"},correct:"B",exp:"Dodd-Frank's ATR rule requires lenders to make a good-faith determination of the borrower's ability to repay based on 8 verified factors including income, assets, and debt obligations."},
+  {id:11,domain:1,dn:"Federal Laws",q:"Which of the following is TRUE about HOEPA (High-Cost Mortgages)?",opts:{A:"Borrower is not entitled to pre-loan counseling",B:"Negative amortization is permitted if disclosed",C:"Lender must provide special disclosure at least 3 business days before consummation",D:"Balloon payments are allowed within the first 5 years"},correct:"C",exp:"HOEPA requires a special disclosure at least 3 business days before consummation. Negative amortization, balloon payments in the first 10 years, and prepayment penalties are generally prohibited."},
+  {id:12,domain:1,dn:"Federal Laws",q:"Under the LO Compensation Rule, an MLO is PROHIBITED from receiving compensation based on:",opts:{A:"Geographic area of origination",B:"Dollar volume of loans closed monthly",C:"Whether the loan was a purchase or refinance",D:"The interest rate or points charged on the loan"},correct:"D",exp:"The LO Comp Rule prohibits compensation tied to any loan term — rate, APR, points, LTV. Volume-based and geography-based compensation are generally permitted."},
+  {id:13,domain:1,dn:"Federal Laws",q:"Under FCRA, how long does a credit reporting agency have to investigate a consumer dispute?",opts:{A:"15 days",B:"30 days",C:"45 days",D:"60 days"},correct:"B",exp:"FCRA gives CRAs 30 days to investigate a consumer dispute (extended to 45 days if the consumer provides additional information during the investigation)."},
+  {id:14,domain:1,dn:"Federal Laws",q:"What advertising trigger terms under Reg Z require full cost disclosures?",opts:{A:"Mentioning the lender's name",B:"Advertising a specific interest rate, payment amount, or down payment",C:"Using the word 'mortgage' in an ad",D:"Displaying the NMLS ID number"},correct:"B",exp:"Under TILA Reg Z, advertising specific rates, payment amounts, down payment amounts, or loan terms triggers requirements to also disclose APR, loan term, and other terms."},
+  {id:15,domain:1,dn:"Federal Laws",q:"Disparate impact in lending occurs when:",opts:{A:"An MLO intentionally denies loans based on race",B:"A neutral policy disproportionately harms a protected class without justification",C:"A lender refuses to accept applications in a specific ZIP code",D:"An MLO charges different rates to borrowers of different races"},correct:"B",exp:"Disparate impact does not require intent. A facially neutral policy (e.g., minimum loan amount) that creates a statistically significant adverse effect on a protected class can violate fair lending laws."},
+  {id:16,domain:1,dn:"Federal Laws",q:"RESPA Section 9 prohibits:",opts:{A:"Kickbacks between settlement service providers",B:"Sellers requiring buyers to use a specific title company",C:"Lenders requiring more than 2 months of escrow cushion",D:"Charging a higher rate based on credit score"},correct:"B",exp:"RESPA §9: Sellers cannot require buyers to purchase title insurance from a specific company as a condition of sale. Penalty = 3× the charges paid."},
+  {id:17,domain:1,dn:"Federal Laws",q:"The GLBA (Gramm-Leach-Bliley Act) requires mortgage lenders to:",opts:{A:"Disclose the APR on all advertisements",B:"Provide borrowers a privacy notice explaining how personal information is used and shared",C:"Report lending data by race to HUD",D:"Maintain a net worth of at least $100,000"},correct:"B",exp:"GLBA requires financial institutions to provide annual privacy notices explaining how nonpublic personal information is collected, used, and shared, along with opt-out rights."},
+  {id:18,domain:1,dn:"Federal Laws",q:"Which of the following is a valid 'changed circumstance' allowing a revised Loan Estimate?",opts:{A:"Market interest rates increased after the LE was issued",B:"The borrower's income is significantly different from what was initially reported",C:"The lender made an error calculating fees on the LE",D:"The borrower's closing date was pushed back 2 weeks"},correct:"B",exp:"Discovery that the borrower's income is materially different from what was reported is new information about the borrower — a valid changed circumstance under TRID."},
+  // Domain 2: State Content (8 questions)
+  {id:19,domain:2,dn:"State Content",q:"A state surety bond for an MLO applicant primarily protects:",opts:{A:"The lender from loan default",B:"The state licensing agency from expenses",C:"Consumers harmed by the MLO's conduct",D:"The MLO from lawsuits"},correct:"C",exp:"A surety bond protects consumers (and sometimes the state) from financial harm caused by an MLO's unlawful or improper conduct — not the lender or the MLO personally."},
+  {id:20,domain:2,dn:"State Content",q:"An MLO changes employers. The new company hasn't accepted NMLS sponsorship yet. The MLO's license is:",opts:{A:"Still active — employer changes are administrative",B:"Inactive — cannot originate until sponsorship is active",C:"Automatically transferred",D:"Suspended for 30 days"},correct:"B",exp:"An MLO license is only active when properly sponsored by an employing entity on NMLS. Without active sponsorship, the license goes inactive and the MLO cannot originate loans."},
+  {id:21,domain:2,dn:"State Content",q:"Under the SAFE Act, which conviction is a PERMANENT automatic disqualifier?",opts:{A:"DUI conviction 8 years ago",B:"Drug felony conviction 10 years ago",C:"Felony fraud conviction 15 years ago",D:"Misdemeanor traffic violation 5 years ago"},correct:"C",exp:"Any felony involving fraud, dishonesty, breach of trust, or money laundering is a permanent bar under the SAFE Act — regardless of when it occurred. Drug felonies are only a bar within 7 years."},
+  {id:22,domain:2,dn:"State Content",q:"Annual CE for licensed MLOs must include (correct breakdown):",opts:{A:"3 hrs federal law, 2 hrs ethics, 2 hrs non-traditional products, 1 hr elective",B:"4 hrs federal law, 2 hrs ethics, 2 hrs electives",C:"3 hrs federal law, 3 hrs ethics, 2 hrs electives",D:"2 hrs federal law, 2 hrs ethics, 4 hrs non-traditional products"},correct:"A",exp:"The 8-hour annual CE requirement: 3 hrs federal law, 2 hrs ethics, 2 hrs non-traditional mortgage products, 1 hr elective. Same every year."},
+  {id:23,domain:2,dn:"State Content",q:"An MLO must amend their NMLS record within 30 days when:",opts:{A:"Originating a loan in an already-licensed state",B:"Being named in a civil lawsuit related to mortgage activity",C:"Renewing their annual license on time",D:"Adding a new property type to their origination mix"},correct:"B",exp:"Being named in a civil lawsuit related to financial services is a material change requiring NMLS amendment within 30 days."},
+  {id:24,domain:2,dn:"State Content",q:"When an MLO voluntarily surrenders their license, NMLS treats the surrender:",opts:{A:"As a clean record after 1 year",B:"Similarly to a revocation in future licensing applications",C:"As an automatic 5-year expungement",D:"With no impact on future applications"},correct:"B",exp:"Voluntary license surrender is noted permanently in NMLS and may be treated similarly to revocation when future applications are evaluated by state regulators."},
+  {id:25,domain:2,dn:"State Content",q:"Pre-licensing education must include how many hours of federal mortgage law?",opts:{A:"2 hours",B:"3 hours",C:"5 hours",D:"6 hours"},correct:"B",exp:"The 20-hour pre-licensing breakdown: 3 hrs federal law, 3 hrs ethics, 2 hrs non-traditional products, 12 hrs electives."},
+  {id:26,domain:2,dn:"State Content",q:"An MLO licensed in State A begins originating loans in State B without a State B license. This is:",opts:{A:"Acceptable if State A has reciprocity with State B",B:"A SAFE Act violation — originating in a state without an active license",C:"Acceptable for 90 days under transitional authority",D:"Acceptable if the borrower is a resident of State A"},correct:"B",exp:"Each MLO must hold an active, approved license in each state where they originate loans. Originating without a state license violates the SAFE Act and state licensing laws."},
+  // Domain 3: General Mortgage (12 questions)
+  {id:27,domain:3,dn:"General Mortgage",q:"What is PITI?",opts:{A:"Principal, Interest, Taxes, Insurance",B:"Principal, Income, Taxes, Investment",C:"Property, Interest, Title, Insurance",D:"Principal, Interest, Transfer, Impound"},correct:"A",exp:"PITI = Principal, Interest, Taxes, Insurance. These four components make up the total monthly housing payment used in DTI calculations."},
+  {id:28,domain:3,dn:"General Mortgage",q:"A 2-1 buydown means:",opts:{A:"2 discount points to reduce rate by 1% permanently",B:"Rate reduced 2% in year 1 and 1% in year 2, then full rate",C:"Fixed for 2 years then adjusts 1% annually",D:"2% down payment with 1% origination fee"},correct:"B",exp:"A 2-1 buydown temporarily reduces the rate by 2% in year 1 and 1% in year 2, then returns to the full note rate in year 3+. Often seller-paid."},
+  {id:29,domain:3,dn:"General Mortgage",q:"An 80-10-10 loan structure means:",opts:{A:"80% first mortgage, 10% second mortgage, 10% down payment",B:"80% LTV, 10% seller credit, 10% lender credit",C:"80% FHA, 10% conventional second, 10% costs",D:"80% fixed, 10% ARM, 10% balloon"},correct:"A",exp:"An 80-10-10 (piggyback loan) uses a first mortgage at 80% LTV, a second mortgage at 10%, and 10% cash down — allowing the borrower to avoid PMI."},
+  {id:30,domain:3,dn:"General Mortgage",q:"Under the Homeowners Protection Act, PMI must be automatically terminated when LTV reaches:",opts:{A:"80%",B:"75%",C:"78%",D:"85%"},correct:"C",exp:"HPA requires automatic PMI cancellation at 78% LTV based on the original amortization schedule. Borrowers can REQUEST cancellation at 80% LTV."},
+  {id:31,domain:3,dn:"General Mortgage",q:"Discount points are:",opts:{A:"Fees for processing the loan",B:"Prepaid interest paid upfront to reduce the loan's interest rate",C:"Points charged for mortgage insurance",D:"Third-party closing cost fees"},correct:"B",exp:"Discount points are prepaid interest (1 point = 1% of the loan amount) paid at closing to permanently buy down the interest rate."},
+  {id:32,domain:3,dn:"General Mortgage",q:"A borrower wanting to purchase a new home before selling their existing one would MOST likely use:",opts:{A:"Reverse mortgage",B:"Bridge loan",C:"HELOC only",D:"Construction loan"},correct:"B",exp:"A bridge loan provides short-term financing using existing home equity, bridging the gap between purchasing a new home and selling the current one."},
+  {id:33,domain:3,dn:"General Mortgage",q:"What is the key difference between note rate and APR?",opts:{A:"The note rate calculates monthly payments; APR includes fees and reflects true annual cost",B:"APR is always lower than note rate",C:"Note rate applies to fixed loans; APR to adjustable",D:"They are the same thing"},correct:"A",exp:"The note rate determines the monthly payment. The APR incorporates the note rate plus finance charges (origination fees, points, MIP) to show the true annual cost of credit."},
+  {id:34,domain:3,dn:"General Mortgage",q:"A 5/1 ARM with a 2/2/6 cap structure and an initial rate of 4.00% — what is the maximum rate ever?",opts:{A:"6.00%",B:"8.00%",C:"10.00%",D:"12.00%"},correct:"C",exp:"The lifetime cap of 6% means the rate can never exceed 4.00% (start) + 6.00% (lifetime cap) = 10.00% max, regardless of index movement."},
+  {id:35,domain:3,dn:"General Mortgage",q:"HECM stands for:",opts:{A:"Home Equity Conversion Mortgage — the FHA-insured reverse mortgage for 62+",B:"High-Efficiency Conventional Mortgage",C:"Home Equity Credit Mechanism",D:"HUD-Endorsed Conventional Mortgage"},correct:"A",exp:"HECM = Home Equity Conversion Mortgage. It is the FHA-insured reverse mortgage product available to homeowners 62+, allowing them to convert home equity to income with no required monthly payments."},
+  {id:36,domain:3,dn:"General Mortgage",q:"Conforming loans are those that:",opts:{A:"Meet all FHA requirements for insurance",B:"Fall within Fannie Mae/Freddie Mac purchase limits and guidelines",C:"Have a DTI below 36%",D:"Require PMI by law"},correct:"B",exp:"Conforming loans meet Fannie Mae and Freddie Mac purchase guidelines, including loan limits ($766,550 for 2024 1-unit) and underwriting criteria. FHA loans are government loans, not conforming."},
+  {id:37,domain:3,dn:"General Mortgage",q:"When a loan is sold to a new servicer, the borrower must be notified at least:",opts:{A:"7 business days before transfer",B:"15 business days before transfer",C:"30 days before transfer",D:"Only after transfer"},correct:"B",exp:"RESPA's servicing transfer rules require written notice at least 15 business days before the effective transfer date, from both the old and new servicer."},
+  {id:38,domain:3,dn:"General Mortgage",q:"A borrower borrows $350,000. Property appraised at $400,000. What is the LTV?",opts:{A:"80%",B:"85%",C:"87.5%",D:"90%"},correct:"C",exp:"LTV = Loan Amount ÷ Appraised Value = $350,000 ÷ $400,000 = 87.5%."},
+  // Domain 4: Origination (14 questions)
+  {id:39,domain:4,dn:"Origination Activities",q:"Which FICO factor carries the GREATEST weight?",opts:{A:"Length of credit history",B:"Types of credit used",C:"Payment history",D:"New credit inquiries"},correct:"C",exp:"Payment history is the most heavily weighted FICO factor at approximately 35% of the score."},
+  {id:40,domain:4,dn:"Origination Activities",q:"FHA gift fund documentation requires:",opts:{A:"Gift letter only",B:"Gift letter plus documentation of the fund transfer",C:"Donor's 60-day bank statements",D:"Gift must be from immediate family only"},correct:"B",exp:"FHA requires a gift letter (stating the amount, relationship, and that no repayment is expected) plus documentation showing the funds transferred from donor to borrower."},
+  {id:41,domain:4,dn:"Origination Activities",q:"Reserve requirements in underwriting refer to:",opts:{A:"Cash the lender must keep on hand",B:"Months of PITI the borrower must have in liquid assets AFTER closing",C:"Funds held in the escrow account",D:"The seller's minimum contribution to costs"},correct:"B",exp:"Reserves are liquid assets equal to a specified number of months of PITI payments, verified after the borrower has paid down payment and closing costs."},
+  {id:42,domain:4,dn:"Origination Activities",q:"Fannie Mae's Desktop Underwriter returns which decision types?",opts:{A:"Approved, Denied, In Review",B:"Approve/Eligible, Refer, Refer with Caution",C:"Pass, Fail, Conditional",D:"Pre-Approved, Pre-Qualified, Suspended"},correct:"B",exp:"DU returns Approve/Eligible (meets guidelines), Refer (needs manual underwriting), or Refer with Caution (high-risk, typically not approvable)."},
+  {id:43,domain:4,dn:"Origination Activities",q:"An appraisal comes in $25,000 below the purchase price. What most likely happens?",opts:{A:"Loan is automatically denied",B:"Lender uses appraised value, potentially changing LTV and DTI",C:"Lender uses purchase price and ignores the appraisal",D:"Borrower must pay the difference in cash (required)"},correct:"B",exp:"Lenders must use the LOWER of appraised value or purchase price. A low appraisal changes the LTV, may require more down payment, and can affect DTI if the borrower increases cash to close."},
+  {id:44,domain:4,dn:"Origination Activities",q:"Which of the following is NOT a valid qualifying income source?",opts:{A:"Self-employment income with 2 years of tax returns",B:"Rental income with lease and history",C:"A verbal promise of a future raise",D:"Social Security disability with award letter"},correct:"C",exp:"A verbal promise of a future raise is not documentable or verifiable. All qualifying income must be documented and have a reasonable expectation of continuance."},
+  {id:45,domain:4,dn:"Origination Activities",q:"A borrower's gross monthly income is $8,000. PITI = $2,000. Car payment = $400. Credit cards = $200. Back-end DTI is:",opts:{A:"25%",B:"30%",C:"32.5%",D:"40%"},correct:"C",exp:"Back-end DTI = ($2,000 + $400 + $200) ÷ $8,000 = $2,600 ÷ $8,000 = 32.5%."},
+  {id:46,domain:4,dn:"Origination Activities",q:"Title insurance protects against:",opts:{A:"Structural defects in the home",B:"Claims from title defects existing before the policy was issued",C:"Property tax increases",D:"Required only for FHA/VA loans"},correct:"B",exp:"Title insurance protects against losses from undiscovered defects in the title (undisclosed liens, ownership disputes, recording errors) that existed before the policy was issued."},
+  {id:47,domain:4,dn:"Origination Activities",q:"Under AIR (Appraisal Independence Requirements), which is PROHIBITED?",opts:{A:"MLO reviewing appraisal for accuracy before underwriting",B:"Processor placing order through an AMC",C:"Loan officer telling appraiser to 'make the numbers work'",D:"Lender selecting from an approved appraiser panel"},correct:"C",exp:"AIR prohibits any party with an interest in the transaction from pressuring an appraiser to reach a target value. 'Make the numbers work' is direct appraisal pressure — a clear violation."},
+  {id:48,domain:4,dn:"Origination Activities",q:"Mortgage inquiries from multiple lenders within a 14-day window affect FICO as:",opts:{A:"Multiple separate inquiries, each reducing the score",B:"A single inquiry — FICO recognizes rate-shopping",C:"No impact — mortgage inquiries are excluded",D:"Two inquiries"},correct:"B",exp:"FICO groups mortgage-related inquiries within a 14-45 day window (depending on version) and treats them as a single inquiry, recognizing that shopping for rates is normal consumer behavior."},
+  {id:49,domain:4,dn:"Origination Activities",q:"A prior-to-funding (PTF) condition is one that must be satisfied:",opts:{A:"Before the file goes to underwriting",B:"Before the lender will wire funds at closing",C:"Before the appraisal is ordered",D:"Before the application is complete"},correct:"B",exp:"PTF conditions must be satisfied before the lender releases funds. Examples: proof of hazard insurance, final pay stub, HOA certification. PTD (prior-to-docs) conditions are cleared before loan documents are drawn."},
+  {id:50,domain:4,dn:"Origination Activities",q:"For a purchase loan, the borrower must have flood insurance when:",opts:{A:"LTV exceeds 80%",B:"The property is in a Special Flood Hazard Area (SFHA) and the loan is federally backed",C:"The home is near any body of water",D:"The lender requires it for all purchase loans"},correct:"B",exp:"Federal law requires flood insurance as a condition of any federally backed mortgage on a property in a FEMA-designated Special Flood Hazard Area (SFHA)."},
+  {id:51,domain:4,dn:"Origination Activities",q:"An MLO orders an appraisal before the borrower acknowledges receipt of the LE. This violates:",opts:{A:"RESPA Section 8",B:"TILA — no fees beyond a credit report can be charged before LE acknowledgment",C:"ECOA — failure to notify applicant of appraisal rights",D:"HMDA — premature data collection"},correct:"B",exp:"Under TILA (TRID), lenders cannot impose fees beyond a bona fide credit report fee until the borrower has received and acknowledged the LE. Ordering an appraisal (a fee) before this is a violation."},
+  {id:52,domain:4,dn:"Origination Activities",q:"A 401(k) with a $100,000 vested balance is counted as how much in reserves under Fannie Mae?",opts:{A:"$100,000 (full value)",B:"$80,000 (80%)",C:"$60,000 (60%)",D:"$50,000 (50%)"},correct:"C",exp:"Fannie Mae counts only 60% of vested retirement account balances, accounting for the 10% early withdrawal penalty and income taxes that would reduce the available amount if liquidated."},
+  // Domain 5: Ethics (8 questions)
+  {id:53,domain:5,dn:"Ethics",q:"Disparate TREATMENT (vs. disparate impact) requires:",opts:{A:"A neutral policy that harms a protected class",B:"Intentional different treatment based on a protected class",C:"Geographic discrimination",D:"Targeting with subprime products"},correct:"B",exp:"Disparate treatment is intentional discrimination — treating an applicant differently BECAUSE of a protected class characteristic. Intent is required. Disparate impact does not require intent."},
+  {id:54,domain:5,dn:"Ethics",q:"An MLO's borrower discloses they plan to list the home as primary residence but actually intend to rent it out. The MLO should:",opts:{A:"Proceed — it's the borrower's responsibility",B:"List primary residence to reduce the rate",C:"Refuse to originate the loan and document the situation",D:"Submit as investment property to protect themselves"},correct:"C",exp:"Occupancy fraud is a federal crime (18 U.S.C. §1014). The MLO must refuse to originate on false terms and document the situation to protect themselves from complicity."},
+  {id:55,domain:5,dn:"Ethics",q:"Predatory lending is BEST characterized by:",opts:{A:"High rates on government-backed loans",B:"Loan products with unfair/abusive terms not in the borrower's best interest",C:"Origination fees above 1%",D:"Lending to borrowers with scores below 620"},correct:"B",exp:"Predatory lending involves abusive, unfair, or deceptive loan products that exploit borrowers — often stripping equity, using excessive fees, or targeting vulnerable consumers."},
+  {id:56,domain:5,dn:"Ethics",q:"An MLO discovers the borrower submitted a fraudulent W-2. The MLO should:",opts:{A:"Continue processing — the fraud is the borrower's fault",B:"Quietly correct the income figure and proceed",C:"Stop processing, notify the lender/supervisor, and document",D:"Contact the employer for a corrected W-2 and resubmit"},correct:"C",exp:"When an MLO discovers fraud, they must stop processing, escalate to compliance/supervisor, and document. Continuing to process a file known to contain fraud makes the MLO complicit."},
+  {id:57,domain:5,dn:"Ethics",q:"'Ghost MLO fraud' involves:",opts:{A:"Creating fictitious borrowers to generate loan fees",B:"Processing loans under another MLO's NMLS number without their knowledge",C:"Using a deceased person's credit to apply for a mortgage",D:"Falsifying an appraisal with a ghost appraiser"},correct:"B",exp:"Ghost MLO fraud involves falsely attributing loans to another MLO's NMLS number — to circumvent licensing requirements, spread production volume, or manipulate compliance audits."},
+  {id:58,domain:5,dn:"Ethics",q:"An MLO can be paid by which of the following without violating the LO Comp Rule?",opts:{A:"Borrower AND lender on the same loan",B:"Lender only, based on the loan's interest rate",C:"Lender only, based on the loan dollar amount",D:"Borrower only, based on the APR"},correct:"C",exp:"The LO Comp Rule allows compensation based on loan amount (larger loan = more pay). It prohibits compensation based on loan terms (rate, APR, points) and dual compensation (borrower + lender)."},
+  {id:59,domain:5,dn:"Ethics",q:"Loan stacking is:",opts:{A:"Submitting one application to multiple lenders simultaneously without disclosure to commit fraud",B:"Offering multiple loan options to the same borrower",C:"Stacking discount points on top of an origination fee",D:"Layering multiple liens on the same property"},correct:"A",exp:"Loan stacking is fraudulent — submitting the same application to multiple lenders simultaneously to obtain multiple approvals/proceeds without disclosing the multiple applications. It's mortgage fraud."},
+  {id:60,domain:5,dn:"Ethics",q:"An MLO accepts a $500 gift card from a title company that refers business to the MLO. This:",opts:{A:"Is always a RESPA §8 violation",B:"May violate RESPA §8 if part of a pattern of gifts tied to referrals",C:"Is permissible if under $600 (IRS threshold)",D:"Is permissible because it was a holiday gift"},correct:"B",exp:"Gifts from referral sources are scrutinized under RESPA §8. A $500 gift card isn't automatically illegal, but a pattern of gifts tied to referral volume can constitute a 'thing of value' for referrals — a §8 violation."}
+];
+
+const scenarios = [
+  {id:1,section:"A",sn:"Compliance & Fair Lending",sit:"An MLO offers a 6.25% rate to a qualified Black borrower and a 5.75% rate to an equally qualified White borrower on the same day. Same credit, LTV, and income.",opts:{A:"HMDA — disparate impact",B:"Fair Housing Act / ECOA — disparate treatment",C:"RESPA Section 8 — unearned fee",D:"TILA — APR misrepresentation"},correct:"B",exp:"Offering different rates to similarly qualified borrowers based on race is intentional disparate treatment — violating both the Fair Housing Act and ECOA."},
+  {id:2,section:"A",sn:"Compliance & Fair Lending",sit:"A mortgage company tells MLOs not to take applications from properties in ZIP codes 32206 and 32209 — both predominantly Black neighborhoods. The stated reason is 'credit risk in the area.'",opts:{A:"Steering",B:"Redlining",C:"Reverse redlining",D:"Churning"},correct:"B",exp:"Refusing to lend in geographic areas based on racial/ethnic composition is redlining — a Fair Housing Act and ECOA violation."},
+  {id:3,section:"A",sn:"Compliance & Fair Lending",sit:"A borrower is a single mother receiving child support income. The MLO tells her 'We don't count child support as qualifying income,' when in fact the lender does accept documented child support.",opts:{A:"RESPA — undisclosed affiliate",B:"ECOA — discrimination based on familial status or public assistance income",C:"TILA — failure to disclose APR",D:"HMDA — failure to collect monitoring data"},correct:"B",exp:"ECOA prohibits discrimination based on receipt of public assistance or familial status. Refusing to count legitimate child support income violates ECOA."},
+  {id:4,section:"A",sn:"Compliance & Fair Lending",sit:"A title company gives an MLO's company free office space worth $2,400/month. In return, the company refers all clients to that title company. No written agreement exists.",opts:{A:"Permissible — no written contract",B:"Permissible if the title company is competitively priced",C:"RESPA §8 violation — office space is a 'thing of value' exchanged for referrals",D:"Permitted because office space isn't a settlement fee"},correct:"C",exp:"RESPA §8 prohibits any 'thing of value' (including free office space) exchanged for referrals of settlement service business — regardless of whether a written agreement exists."},
+  {id:5,section:"A",sn:"Compliance & Fair Lending",sit:"A lender's standard minimum loan amount of $75,000 results in a statistically significant denial rate for applicants in lower-income, predominantly minority areas. No intent to discriminate exists.",opts:{A:"Disparate treatment — intent proven",B:"Redlining — geographic exclusion",C:"Disparate impact — neutral policy harms a protected class",D:"Reverse redlining"},correct:"C",exp:"A facially neutral policy (minimum loan amount) that creates a statistically significant disparate effect on a protected class is disparate impact — no intent required."},
+  {id:6,section:"A",sn:"Compliance & Fair Lending",sit:"An MLO notices statistical disparities: the company has a much lower approval rate for female applicants vs. similarly qualified male applicants. What should the MLO do?",opts:{A:"Ignore it — approval rates naturally vary",B:"Bring it to compliance for a fair lending analysis",C:"Begin approving more female applicants at higher DTIs",D:"Report directly to HUD before notifying the company"},correct:"B",exp:"Statistical disparities in approval rates are HMDA fair lending red flags. The correct action is escalating to compliance — not unilaterally changing underwriting standards."},
+  {id:7,section:"A",sn:"Compliance & Fair Lending",sit:"An MLO advertises on social media: 'Get a 30-year fixed! Payments starting at just $999/month!' Under Reg Z, what else must this ad include?",opts:{A:"Nothing — social media posts are exempt",B:"APR, loan term, down payment, and loan amount (specific payment = trigger term)",C:"Just the APR",D:"NMLS ID and company name only"},correct:"B",exp:"A specific monthly payment is a Reg Z trigger term. The ad must also disclose the APR, down payment, loan term, and loan amount. NMLS ID and company name are also required."},
+  {id:8,section:"A",sn:"Compliance & Fair Lending",sit:"A disabled borrower asks for loan documents in large-print format. The lender refuses, saying it's 'too burdensome.' Is this a Fair Housing Act issue?",opts:{A:"No — lenders aren't required to provide alternative formats",B:"Yes — may constitute failure to provide a reasonable accommodation",C:"No — the borrower can use a magnifying glass",D:"Must be reviewed by HUD before the lender decides"},correct:"B",exp:"The Fair Housing Act requires lenders to provide reasonable accommodations to persons with disabilities unless it causes undue hardship. Large-print documents are generally a reasonable accommodation."},
+  {id:9,section:"A",sn:"Compliance & Fair Lending",sit:"An MLO refers all clients to a home inspector owned by their brother-in-law. No money changes hands. The MLO never discloses this family relationship to borrowers.",opts:{A:"TILA — conflict of interest disclosure",B:"RESPA — AfBA disclosure required at time of referral",C:"ECOA — adverse action notice",D:"FCRA — credit report disclosure"},correct:"B",exp:"A family financial relationship creates an affiliated business arrangement. RESPA requires an AfBA disclosure at the time of the referral, regardless of whether money changes hands."},
+  {id:10,section:"A",sn:"Compliance & Fair Lending",sit:"An MLO offers a 10% rate with a balloon payment and targets elderly homeowners in retirement communities, knowing they qualify for a standard 6.5% conventional loan.",opts:{A:"Redlining",B:"Reverse redlining / predatory lending / steering",C:"Dual compensation",D:"Churning"},correct:"B",exp:"Targeting a vulnerable population with inferior loan products when they qualify for better terms is predatory lending and reverse redlining — simultaneously violating multiple fair lending principles."},
+  {id:11,section:"A",sn:"Compliance & Fair Lending",sit:"A borrower denies providing race/ethnicity on a face-to-face application. The MLO should:",opts:{A:"Leave the field blank and note 'refused'",B:"Note 'information not provided' and use visual observation/surname to assign the data",C:"Deny the application — refusing monitoring data is grounds for denial",D:"Only collect it if the borrower agrees in writing"},correct:"B",exp:"HMDA regulations require face-to-face lenders to collect monitoring information by visual observation or surname if the applicant refuses. Denial based on refusal is a violation."},
+  {id:12,section:"A",sn:"Compliance & Fair Lending",sit:"A borrower applies for a mortgage. The lender denies them and mails the adverse action notice 45 days later. The ECOA required timeframe is:",opts:{A:"15 business days",B:"30 days",C:"60 days",D:"No specific timeframe"},correct:"B",exp:"ECOA requires adverse action notification within 30 days of receiving a completed application. Mailing at 45 days violates ECOA."},
+  {id:13,section:"A",sn:"Compliance & Fair Lending",sit:"An MLO receives a flat $500/month from a title company for a 'website link.' No referrals are tracked. Is this a RESPA concern?",opts:{A:"No — flat fees are always permissible",B:"Yes — if no bona fide marketing services are performed for the fee",C:"No — the fee is per month, not per referral",D:"No — website advertising is not a settlement service"},correct:"B",exp:"MSAs (Marketing Service Agreements) are scrutinized under RESPA §8. If no real marketing services are documented and the fee is essentially a referral payment, it's a kickback."},
+  {id:14,section:"A",sn:"Compliance & Fair Lending",sit:"A lender applies a blanket co-signer requirement for all applicants on a visa, regardless of credit score or income. A Brazilian applicant on a work visa is denied.",opts:{A:"TILA — failed to disclose loan terms",B:"ECOA / FHA — discrimination based on national origin",C:"RESPA §8 — referral fee arrangement",D:"SAFE Act — unlicensed activity"},correct:"B",exp:"Using visa status as a proxy for national origin to impose blanket co-signer requirements violates ECOA and the Fair Housing Act (national origin discrimination)."},
+  {id:15,section:"A",sn:"Compliance & Fair Lending",sit:"An appraisal comes in low on a property in a minority neighborhood. The buyer's agent alleges the appraiser discriminated. Who investigates?",opts:{A:"NMLS — licenses appraisers and MLOs",B:"HUD — enforces the Fair Housing Act, including discriminatory appraisals",C:"CFPB — regulates all residential mortgage activity",D:"State banking department — licenses appraisers"},correct:"B",exp:"The Fair Housing Act prohibits discriminatory appraisals. HUD has jurisdiction over Fair Housing complaints, including claims of biased property valuations."},
+  {id:16,section:"B",sn:"TRID & Disclosures",sit:"A borrower submits a complete application on Monday. The Loan Estimate is emailed on Friday (4 business days later).",opts:{A:"No violation — email is instantaneous",B:"Yes — LE must be delivered within 3 business days",C:"No — Friday is within a reasonable timeframe",D:"Only if the APR differs"},correct:"B",exp:"The LE must be delivered within 3 business days of a complete application. Day 1 = day after application. Delivering on day 4 is a TRID violation."},
+  {id:17,section:"B",sn:"TRID & Disclosures",sit:"At closing, the origination fee is $300 more than on the Loan Estimate. The MLO says 'a few costs changed.' Is this acceptable?",opts:{A:"Yes — costs often change",B:"No — origination charges have 0% tolerance and cannot increase without a valid changed circumstance and revised LE",C:"Yes — if total costs don't exceed 10% of the LE",D:"No — any cost increase requires a new application"},correct:"B",exp:"Origination charges have zero tolerance under TRID. They cannot increase from LE to CD without a valid changed circumstance that triggered a revised LE."},
+  {id:18,section:"B",sn:"TRID & Disclosures",sit:"After the LE is issued, the lender discovers the borrower's income is $15,000/year less than initially stated. Can the lender revise the LE?",opts:{A:"No — fees are locked once LE is issued",B:"Yes — materially different income is a valid changed circumstance",C:"Only if the borrower requests it in writing",D:"Only if the loan amount changes"},correct:"B",exp:"Discovery of new information about the borrower (e.g., significantly different income) is a valid changed circumstance, allowing a revised LE within 3 business days of discovery."},
+  {id:19,section:"B",sn:"TRID & Disclosures",sit:"A Closing Disclosure is emailed to the borrower on Tuesday. Saturday counts as a business day for TRID. The borrower wants to close on Friday. Can they?",opts:{A:"Yes — Tue, Wed, Thu = 3 business days",B:"No — Sat counts: Tue delivery = Wed/Thu/Sat = 3 days. Earliest close is Monday",C:"Yes — with written waiver",D:"No — must wait 5 business days"},correct:"B",exp:"Saturday counts as a business day for the CD waiting period. Tuesday delivery: Day 1=Wed, Day 2=Thu, Day 3=Sat. The 3-day period ends Saturday, so the earliest closing is Monday."},
+  {id:20,section:"B",sn:"TRID & Disclosures",sit:"A lender credit INCREASES from $500 on the LE to $800 on the CD. Is this permissible?",opts:{A:"No — lender credits cannot change",B:"Yes — increases in lender credits are permissible (benefit the borrower)",C:"Only if a revised LE was issued first",D:"Only if the interest rate changed"},correct:"B",exp:"Lender credits that increase (i.e., more credit than disclosed on the LE) are permissible under TRID — they benefit the borrower. Decreases in lender credits are not allowed without a changed circumstance."},
+  {id:21,section:"B",sn:"TRID & Disclosures",sit:"A borrower is refinancing their primary home. At closing they want to waive the 3-day right of rescission. The MLO should:",opts:{A:"Allow it — the borrower requested it",B:"Only allow it for a documented bona fide personal financial emergency, in writing",C:"Deny — rescission can never be waived",D:"Allow it with a witness signature"},correct:"B",exp:"TILA rescission can ONLY be waived in a documented bona fide personal financial emergency (e.g., imminent foreclosure). A desire for fast funds does not qualify."},
+  {id:22,section:"B",sn:"TRID & Disclosures",sit:"A VA loan closes with a $1,500 'underwriting fee' not on the LE. Under TRID, this is:",opts:{A:"Acceptable — VA loans are TRID-exempt",B:"A violation — the undisclosed fee must be cured by the lender",C:"Acceptable with a signed closing disclosure",D:"Acceptable — the VA funding fee is always added at closing"},correct:"B",exp:"VA loans are subject to TRID. An undisclosed fee violating tolerance must be cured (refunded) by the lender within 60 calendar days of settlement."},
+  {id:23,section:"B",sn:"TRID & Disclosures",sit:"A borrower provides 5 of the 6 TRID application triggers — everything except the property address (still shopping). Is the lender required to issue an LE?",opts:{A:"Yes — 5 triggers are sufficient",B:"No — all 6 triggers must be present before an LE is required",C:"Yes — within 24 hours of collecting 5 triggers",D:"No — also need the purchase price"},correct:"B",exp:"All 6 TRID triggers must be collected to constitute a complete application requiring an LE. Without the property address, there is no complete application."},
+  {id:24,section:"B",sn:"TRID & Disclosures",sit:"The borrower selects a title company from the lender's written list. The LE showed $800 for title. At closing it's $900 ($100 more, 12.5% increase). Is this within TRID tolerances?",opts:{A:"No — lender's list services have 0% tolerance",B:"May be OK if aggregate of all 10%-tolerance services doesn't exceed 10% in total",C:"Yes — title fees have unlimited tolerance",D:"No — any title fee increase requires a lender credit"},correct:"B",exp:"Lender's list services fall in the 10% aggregate tolerance bucket. Each individual service can increase, but the TOTAL increase across all services in this category can't exceed 10%."},
+  {id:25,section:"B",sn:"TRID & Disclosures",sit:"A borrower refinances. 3 days after closing, they want to rescind. The lender says cash-out refinances are exempt from rescission. Is the lender right?",opts:{A:"Yes — cash-out refis are exempt",B:"No — rescission applies to ALL refinances on a primary residence, including cash-out",C:"Yes — only HELOCs have rescission rights",D:"Yes — only first-time homebuyers have rescission rights"},correct:"B",exp:"TILA's right of rescission applies to any refinance transaction (including cash-out) on a borrower's primary residence. The lender is wrong."},
+  {id:26,section:"B",sn:"TRID & Disclosures",sit:"On a no-cost refinance, the APR is much higher than the note rate. A borrower asks why. The correct explanation:",opts:{A:"APR is a regulatory requirement and means nothing",B:"APR includes the note rate plus financed fees, spread over the loan term — true annual cost",C:"The difference is just mortgage insurance",D:"The APR was calculated incorrectly"},correct:"B",exp:"On a no-cost loan, fees are financed into the rate (lender credits cover costs). The APR reflects this by incorporating those financed costs, resulting in an APR higher than the note rate."},
+  {id:27,section:"B",sn:"TRID & Disclosures",sit:"A borrower receives a CD on a Tuesday. Assuming Saturday counts as a business day, what is the EARLIEST they can close?",opts:{A:"Friday",B:"Saturday",C:"Monday",D:"Tuesday"},correct:"C",exp:"Tuesday receipt: Day 1=Wed, Day 2=Thu, Day 3=Sat (Saturday counts). 3-day period ends Saturday. Earliest closing = Monday."},
+  {id:28,section:"C",sn:"Underwriting & Application",sit:"A self-employed borrower provides 1 year of tax returns showing $85,000 income. Conventional guidelines require 2 years. What should the MLO do?",opts:{A:"Use 1-year return since income looks strong",B:"Advise 2 years are required; suggest alternatives like FHA or portfolio lending",C:"Average 1 year and proceed",D:"Ask for a letter of explanation instead"},correct:"B",exp:"Conventional (Fannie Mae/Freddie Mac) requires a 2-year history of self-employment income. The MLO must advise the borrower and explore program alternatives honestly."},
+  {id:29,section:"C",sn:"Underwriting & Application",sit:"An FHA appraisal shows the water heater is non-functional. The appraiser notes this as a deficiency. What must happen?",opts:{A:"Loan can close — appraisal is complete",B:"Lender escrows funds for repair at closing",C:"Water heater must be repaired and re-inspected before the loan closes",D:"Borrower signs a waiver"},correct:"C",exp:"FHA appraisals review property condition. FHA requires all major mechanical systems (water heater, HVAC, plumbing, electrical) to be operational. The deficiency must be corrected and verified."},
+  {id:30,section:"C",sn:"Underwriting & Application",sit:"A Chapter 7 bankruptcy was discharged 2 years ago. The borrower is applying for a conventional Fannie Mae loan. Are they eligible?",opts:{A:"Yes — no waiting period for conventional",B:"No — 7-year wait required",C:"No — Fannie Mae requires 4-year wait after Chapter 7 discharge",D:"Yes — if credit is rebuilt to 640+"},correct:"C",exp:"Fannie Mae's standard waiting period is 4 years after Chapter 7 discharge (2 years with documented extenuating circumstances). At 2 years, they don't yet qualify under standard guidelines."},
+  {id:31,section:"C",sn:"Underwriting & Application",sit:"A VA appraisal (Notice of Value) comes in $15,000 below the purchase price. The seller won't reduce the price. What are the veteran's options?",opts:{A:"Loan must be denied — VA won't lend above appraised value",B:"Veteran can pay the price difference in cash (VA escape clause protects against being forced to buy)",C:"Seller must reduce by law",D:"Lender covers the gap with a seller concession"},correct:"B",exp:"The VA escape clause allows veterans to walk away if the appraisal is low. If they choose to proceed, they may pay the difference in cash — but cannot finance the gap above the VA appraised value."},
+  {id:32,section:"C",sn:"Underwriting & Application",sit:"A borrower earns $60,000 base + $20,000 overtime for 18 months. Can the overtime be used to qualify?",opts:{A:"Yes — any current overtime counts",B:"No — overtime income is never used",C:"It depends — conventional typically requires 2-year history; 18 months may or may not qualify",D:"Yes — but only 50% can be used"},correct:"C",exp:"Overtime income typically requires a 2-year history under Fannie Mae guidelines. 18 months is close — some lenders may accept with additional documentation. Always check lender overlays."},
+  {id:33,section:"C",sn:"Underwriting & Application",sit:"A $100,000 vested 401(k) is being used for reserves on a conventional loan. How much does the lender count?",opts:{A:"$100,000 — full value",B:"$80,000 — 80%",C:"$60,000 — 60%",D:"$50,000 — 50%"},correct:"C",exp:"Fannie Mae applies a 60% haircut to retirement accounts to account for the 10% early withdrawal penalty plus income taxes that would reduce the accessible amount."},
+  {id:34,section:"C",sn:"Underwriting & Application",sit:"A borrower has had 3 late payments in the past 12 months. FHA requires no more than 1 late payment in the past 12 months. The loan is denied. The borrower asks the MLO to find a 'less strict' FHA lender.",opts:{A:"Submit to multiple FHA lenders simultaneously",B:"FHA guidelines are set by HUD and apply universally; suggest credit improvement or alternative programs",C:"Remove one late payment from the credit report",D:"Submit as conventional instead"},correct:"B",exp:"FHA guidelines are set by HUD and are universal across all FHA lenders (though lenders may have stricter overlays). The MLO must be honest and suggest legitimate alternatives."},
+  {id:35,section:"C",sn:"Underwriting & Application",sit:"A borrower has a $150,000 purchase price, 5% down ($7,500), and $5,000 in closing costs. They have $14,000 in savings. Is this enough?",opts:{A:"No — insufficient for down payment and closing costs combined",B:"Yes — $14,000 > $12,500 needed, and $1,500 is left for reserves",C:"It depends on whether lender credits are used",D:"No — FHA requires 3 months of reserves"},correct:"B",exp:"Down payment = $7,500, closing costs = $5,000, total = $12,500. The borrower has $14,000, leaving $1,500 after closing. Reserve requirements depend on loan type and AUS — this is a borderline case."},
+  {id:36,section:"C",sn:"Underwriting & Application",sit:"A borrower rents from a relative and makes cash rent payments. Can this be used as rental payment history?",opts:{A:"Yes — cash payments are acceptable with a letter of explanation",B:"Yes — bank statements showing the withdrawals are sufficient",C:"No — cash rent to a relative typically cannot be verified as rental history",D:"Yes — if the relative signs an affidavit"},correct:"C",exp:"Cash rent payments to relatives are unverifiable through standard means. Without bank statements clearly showing the rent purpose, underwriters generally cannot use this as rental payment history."},
+  {id:37,section:"C",sn:"Underwriting & Application",sit:"An underwriter issues a 'Suspend' decision. This means:",opts:{A:"Loan is approved but closing is delayed",B:"File is missing required info; decision suspended until provided",C:"Loan is denied pending HUD review",D:"Income documentation appears fraudulent"},correct:"B",exp:"A Suspend or Incomplete decision means the underwriter cannot make a credit decision due to missing documentation. It is NOT a denial — the file needs additional information."},
+  {id:38,section:"C",sn:"Underwriting & Application",sit:"A borrower is purchasing with 5% down at 95% LTV. PMI is required. How can PMI be removed?",opts:{A:"PMI is permanent on conventional loans",B:"Borrower can request cancellation at 80% LTV; automatic termination at 78% LTV under HPA",C:"PMI is removed when credit score reaches 740",D:"PMI requires a $5,000 lump-sum payment to cancel"},correct:"B",exp:"HPA: Borrower can REQUEST PMI cancellation at 80% LTV. Lender must AUTOMATICALLY terminate at 78% LTV per original amortization schedule. PMI also must terminate at the loan midpoint."},
+  {id:39,section:"C",sn:"Underwriting & Application",sit:"An MLO takes a loan application where the borrower provided pay stubs that appear professionally formatted, but the 'employer' phone number goes to a personal cell and the address is a vacant lot.",opts:{A:"Accept the docs — document review is the underwriter's job",B:"Flag as income fraud red flags; escalate to compliance; do not proceed as-is",C:"Call the 'employer' and accept verbal confirmation",D:"Submit and note the discrepancies in an addendum"},correct:"B",exp:"Inconsistencies in employment documentation are fraud red flags. The MLO must escalate — not turn a blind eye. Submitting a file knowing it may contain fraudulent documents is a crime."},
+  {id:40,section:"D",sn:"Ethics & Fraud",sit:"A borrower wants to purchase an investment property. They ask the MLO to list it as 'primary residence' on the application to get a better rate. The MLO agrees.",opts:{A:"Acceptable if the borrower plans to live there eventually",B:"Occupancy fraud — a federal crime for both the borrower AND the MLO",C:"Acceptable if disclosed to the lender in a letter",D:"A RESPA violation only"},correct:"B",exp:"Falsely stating occupancy on a mortgage application is occupancy fraud under 18 U.S.C. §1014. Both the borrower AND the MLO face federal criminal liability."},
+  {id:41,section:"D",sn:"Ethics & Fraud",sit:"An appraiser calls and asks 'Should I be near the $350,000 sales price?' The MLO responds: 'We really need it to come in at value for this deal to work.'",opts:{A:"Normal communication — MLO is just being informative",B:"Violates AIR — MLO is applying pressure to influence the appraiser",C:"Acceptable since no specific number was demanded",D:"Violates RESPA but not TILA"},correct:"B",exp:"AIR prohibits any party with an interest in the transaction from pressuring an appraiser. 'We need it to come in at value' is improper appraisal pressure regardless of subtlety."},
+  {id:42,section:"D",sn:"Ethics & Fraud",sit:"A manager tells MLOs to always recommend the 30-year fixed over the ARM because 'the margin is higher.' Several borrowers would benefit from an ARM. The MLO's obligation is:",opts:{A:"Follow the manager's direction",B:"Recommend the product that best fits each borrower's individual needs",C:"Offer both with no guidance",D:"Document the manager's instruction for self-protection only"},correct:"B",exp:"MLOs have an ethical and legal duty under the anti-steering provisions to recommend loan products in the borrower's best interest — not based on MLO profit."},
+  {id:43,section:"D",sn:"Ethics & Fraud",sit:"A borrower asks the MLO to submit their application to 5 different lenders simultaneously without disclosing this to the lenders.",opts:{A:"Legal — rate shopping is encouraged",B:"Loan stacking — mortgage fraud if done to obtain multiple loans simultaneously",C:"Application hedging — industry-accepted practice",D:"Pre-qualification — no formal application"},correct:"B",exp:"Loan stacking involves submitting the same application to multiple lenders simultaneously to obtain multiple approvals (and potentially draw on multiple loan proceeds). This is mortgage fraud."},
+  {id:44,section:"D",sn:"Ethics & Fraud",sit:"An MLO provides a written quote for 5.75% with no origination fee. At closing, the rate is 6.125% with a $1,500 fee. The borrower never agreed to the change.",opts:{A:"Standard rate fluctuation — rates change",B:"Bait and switch — advertising favorable terms and switching to unfavorable ones at closing",C:"Acceptable if CD was delivered 3 days early",D:"Acceptable if within TRID tolerances"},correct:"B",exp:"Bait and switch is an unfair and deceptive practice (UDAAP violation). Offering favorable terms to attract a borrower, then substituting unfavorable terms at closing, is both unethical and potentially illegal."},
+  {id:45,section:"D",sn:"Ethics & Fraud",sit:"An MLO discovers that the borrower's employer just announced mass layoffs — but the borrower hasn't been notified yet. Closing is tomorrow.",opts:{A:"Proceed — the layoff hasn't happened yet",B:"Inform the lender and allow them to verify current employment before funding",C:"Coach the borrower to call in sick to avoid a final VOE",D:"Tell the borrower to find a new job and reapply in 60 days"},correct:"B",exp:"Lenders typically verify employment immediately before funding. The MLO must ensure the file remains accurate. Coaching a borrower to circumvent verification is fraud."},
+  {id:46,section:"D",sn:"Ethics & Fraud",sit:"An MLO submits a file with inflated stated income for a friend who doesn't qualify, hoping AUS approves it anyway.",opts:{A:"Acceptable — AUS makes the final decision",B:"Income fraud — knowingly submitting inaccurate income data is a federal crime",C:"Acceptable with a letter of explanation",D:"A minor compliance issue"},correct:"B",exp:"Knowingly falsifying income on a mortgage application violates 18 U.S.C. §1014. An AUS approval based on fraudulent data does not immunize the MLO or borrower from criminal liability."},
+  {id:47,section:"D",sn:"Ethics & Fraud",sit:"An MLO discovers during processing that the borrower submitted a fraudulent W-2.",opts:{A:"Continue — the fraud is the borrower's fault",B:"Quietly correct the income and proceed",C:"Stop processing, notify supervisor/compliance, and document",D:"Contact the employer for a corrected W-2 and resubmit"},correct:"C",exp:"When an MLO discovers fraud, they must stop, escalate to compliance, and document. Continuing to process a file known to contain fraud makes the MLO complicit."},
+  {id:48,section:"D",sn:"Ethics & Fraud",sit:"A senior MLO processes loans under a junior MLO's NMLS number to split production and avoid audit thresholds.",opts:{A:"Loan stacking",B:"Ghost MLO fraud / loan splitting",C:"Dual compensation",D:"Bait and switch"},correct:"B",exp:"Falsely attributing loans to another MLO's NMLS number is 'ghost MLO fraud' or loan splitting — a SAFE Act violation that can result in license revocation and criminal charges."},
+  {id:49,section:"D",sn:"Ethics & Fraud",sit:"An MLO uses a client's contact info from the loan application to market them products from an affiliated insurance company without their consent.",opts:{A:"TILA — unauthorized financial data use",B:"GLBA — sharing NPI without proper opt-out notice",C:"ECOA — unauthorized marketing to protected classes",D:"FCRA — unauthorized credit info use"},correct:"B",exp:"GLBA requires financial institutions to provide privacy notices and give consumers the right to opt out of having their nonpublic personal information shared with non-affiliated third parties."},
+  {id:50,section:"D",sn:"Ethics & Fraud",sit:"An MLO is offered an all-expenses-paid golf trip by a real estate developer whose clients frequently use the MLO. The correct action is:",opts:{A:"Accept — it's a courtesy, not a referral fee",B:"Accept if the MLO reciprocates with referrals in good faith",C:"Decline — significant gifts from referral sources can violate RESPA §8",D:"Accept and disclose to the next borrower"},correct:"C",exp:"Accepting gifts of significant value from referral sources creates a quid pro quo arrangement that can violate RESPA §8, even without an explicit agreement."},
+  {id:51,section:"E",sn:"State Licensing",sit:"An MLO passes the SAFE exam and completes all pre-licensing education. They begin originating loans before receiving state license approval.",opts:{A:"Acceptable — completing requirements is enough",B:"SAFE Act violation — originating before license approval is unlicensed activity",C:"Acceptable for 30 days under a provisional license",D:"Acceptable for their home state only"},correct:"B",exp:"An MLO must have an approved, active license before originating mortgage loans. Beginning to originate while the application is pending (absent transitional authority) is a violation."},
+  {id:52,section:"E",sn:"State Licensing",sit:"An MLO's license expires December 31. They complete CE on December 28 but don't submit the renewal application until January 5.",opts:{A:"Still active — CE completion is what matters",B:"Lapsed — both CE AND timely renewal application (with fees) must be submitted by the deadline",C:"On probationary status until processed",D:"Active for 30 days after expiration"},correct:"B",exp:"CE completion alone does not renew the license. Most states require both completed CE AND timely submission of the renewal application with fees by the expiration date."},
+  {id:53,section:"E",sn:"State Licensing",sit:"An MLO is named in a civil lawsuit alleging mortgage misrepresentation 60 days ago. Their NMLS record has not been updated.",opts:{A:"No action — civil lawsuits aren't reportable until resolved",B:"Amend NMLS record immediately — most states require disclosure within 30 days",C:"Report only if a judgment is entered",D:"Ask their employer to report on their behalf"},correct:"B",exp:"Most state licensing requirements mandate disclosure of civil lawsuits related to financial services activity within 30 days. The MLO is already 30 days past the deadline."},
+  {id:54,section:"E",sn:"State Licensing",sit:"A state denies an MLO's application due to a 10-year-old drug felony conviction.",opts:{A:"The 10-year-old conviction is automatically waived under the SAFE Act",B:"Drug felonies are permanently disqualifying",C:"Drug felonies within 7 years are automatic bars; a 10-year conviction may still be reviewed on fitness grounds",D:"The applicant can bypass the state with a federal exemption"},correct:"C",exp:"The SAFE Act automatic bar applies to drug felonies within the past 7 years. A 10-year conviction is not an automatic bar, but states can still deny based on character and fitness review."},
+  {id:55,section:"E",sn:"State Licensing",sit:"An MLO in State X wants to originate a loan for a borrower buying property in State Y, where the MLO is not licensed. The company is licensed in State Y.",opts:{A:"Yes — company license covers all employees",B:"No — each individual MLO must be personally licensed in the state where the property is located",C:"Yes — if borrower is a resident of State X",D:"Yes — if State Y has reciprocity with State X"},correct:"B",exp:"Under the SAFE Act, each individual MLO must hold a license in the state where the subject property is located (or the borrower's state, depending on state law). Company license does not cover unlicensed employees."},
+  {id:56,section:"E",sn:"State Licensing",sit:"An MLO completes 6 of the required 8 CE hours. Can they renew their license?",opts:{A:"Yes — 6 hours shows good faith",B:"No — all 8 hours must be completed; partial completion doesn't satisfy the requirement",C:"Yes — make up remaining 2 in first quarter of next year",D:"Yes — if 6 hours covered the mandatory topics"},correct:"B",exp:"CE requirements must be fully satisfied (all 8 hours) before license renewal. There is no partial credit or make-up grace period after the license expires."},
+  {id:57,section:"E",sn:"State Licensing",sit:"An MLO's license is revoked in State A for fraud. They apply in State B, intentionally omitting the State A revocation on the NMLS application.",opts:{A:"May be approved — states don't share information",B:"Fraudulent — NMLS records are national; omission is grounds for denial and potentially criminal charges",C:"MLO must wait 1 year before applying in another state",D:"Only the date of revocation matters; omission is administrative"},correct:"B",exp:"NMLS records are national and public. A revocation in any state is visible to all regulators. Intentionally omitting it is material misrepresentation on a licensing application."},
+  {id:58,section:"E",sn:"State Licensing",sit:"An MLO wants to also work as a real estate agent while originating loans.",opts:{A:"Always prohibited to hold both licenses",B:"Some states permit it; RESPA concerns arise if MLO refers clients to themselves as agent",C:"RESPA explicitly permits MLO/real estate dual roles",D:"Only allowed at banks"},correct:"B",exp:"Dual licensing rules vary by state. Even where permitted, an MLO who is also the buyer's agent and originates their own client's loan creates serious RESPA §8 conflict-of-interest issues."},
+  {id:59,section:"E",sn:"State Licensing",sit:"An MLO changes employers. Their new company's compliance manager says to 'start originating right away — NMLS updates take a few days.'",opts:{A:"OK — employer changes are administrative",B:"Wait until new employer's sponsorship is active on NMLS — originating before that means no active license",C:"Get verbal confirmation from the state regulator first",D:"Originate in the new employer's name with a retroactive NMLS update"},correct:"B",exp:"An MLO license is only active when their employing entity's sponsorship is active in NMLS. Originating before the sponsorship is accepted means originating without an active license."},
+  {id:60,section:"E",sn:"State Licensing",sit:"An MLO is offered a job at a company under federal investigation for predatory lending. The MLO's name is not involved. Should they have concerns?",opts:{A:"No — the investigation involves the company, not the individual",B:"Yes — knowingly working for a predatory company could implicate the MLO; due diligence is prudent",C:"No — MLO is protected as long as they don't originate the specific loans under investigation",D:"Only if the company is already under a consent order"},correct:"B",exp:"An MLO who knowingly participates in a company's predatory lending activities — even on 'clean' loans — can be implicated in broader enforcement. Due diligence before joining is both practical and ethically required."}
+];
+
+const sessions = [
+  {n:1,title:"Ethics Foundations + SAFE Act",desc:"SAFE Act registration vs. licensing, prohibited acts, fair lending, advertising ethics",domain:5,d:"d5"},
+  {n:2,title:"RESPA & TILA",desc:"Section 8 kickbacks, AfBA, LE/CD timelines, APR, right of rescission, tolerances",domain:1,d:"d1"},
+  {n:3,title:"ECOA, HMDA & Fair Lending",desc:"Protected classes, adverse action, HMDA reporting, disparate treatment vs. impact",domain:1,d:"d1"},
+  {n:4,title:"FCRA, BSA & PATRIOT Act",desc:"Credit reports, dispute rights, CTRs, SARs, structuring, AML, CIP",domain:1,d:"d1"},
+  {n:5,title:"Dodd-Frank, CFPB & QM",desc:"ATR rule, Qualified Mortgage, CFPB authority, ability-to-repay factors",domain:1,d:"d1"},
+  {n:6,title:"HOEPA & HPML",desc:"High-Cost Mortgages vs. Higher-Priced Mortgages, thresholds, restrictions",domain:1,d:"d1"},
+  {n:7,title:"Loan Application & Processing",desc:"URLA/1003, 6 TRID triggers, income types, DTI, LTV, gift funds, assets",domain:4,d:"d4"},
+  {n:8,title:"Disclosures & TRID Deep Dive",desc:"LE/CD in depth, tolerances, changed circumstances, timing rules",domain:1,d:"d1"},
+  {n:9,title:"Underwriting & Credit",desc:"FICO scoring, AUS systems, credit events, income documentation, conditions",domain:4,d:"d4"},
+  {n:10,title:"Mortgage Products",desc:"Fixed, ARM, balloon, buydowns, HELOCs, construction, bridge, reverse",domain:3,d:"d3"},
+  {n:11,title:"Government Loans: FHA, VA, USDA",desc:"MIP/funding fees, eligibility, appraisal requirements, COE, 203(k)",domain:3,d:"d3"},
+  {n:12,title:"Secondary Market",desc:"Fannie Mae, Freddie Mac, Ginnie Mae, MBS, loan servicing, conforming",domain:3,d:"d3"},
+  {n:13,title:"Property, Appraisal & Title",desc:"Appraisal methods, AIR, AMCs, title insurance, property types, liens",domain:3,d:"d3"},
+  {n:14,title:"Closing & Settlement",desc:"CD walkthrough, prepaids, escrow setup, prorations, closing costs",domain:4,d:"d4"},
+  {n:15,title:"Uniform State Content",desc:"NMLS licensing, surety bonds, CE, disciplinary actions, license status",domain:2,d:"d2"},
+  {n:16,title:"Final Review & Exam Strategy",desc:"All 5 domains, exam day tips, high-frequency topics, time management",domain:5,d:"d5"}
+];
+
+// ============================================================
+// APP STATE
+// ============================================================
+let currentDeck = "Key Numbers";
+let fcIndex = 0;
+let fcKnown = new Set();
+let fcCards = [];
+let quizMode = 'all';
+let quizQueue = [];
+let quizCurrent = 0;
+let quizCorrect = 0;
+let quizWrong = [];
+let quizAnswered = false;
+let wrongBank = JSON.parse(localStorage.getItem('nmls_wrong') || '[]');
+
+// ============================================================
+// NAV
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+  if (name === 'home') updateProgress();
+  if (name === 'flash') initFlashcards();
+  if (name === 'scenarios') renderScenarios('all');
+  if (name === 'guide') renderGuide();
+  if (name === 'quiz') { showSetup(); loadPastScores(); }
+}
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+function updateProgress() {
+  const scores = JSON.parse(localStorage.getItem('nmls_scores') || '[]');
+  let html = '';
+  if (scores.length === 0) {
+    html = '<p class="text-muted text-sm">No quiz scores yet. Take a practice quiz to track your progress!</p>';
+  } else {
+    scores.slice(-5).reverse().forEach(s => {
+      const pct = Math.round(s.correct / s.total * 100);
+      const cls = pct >= 75 ? 'score-pass' : 'score-fail';
+      html += `<div class="flex-between mb-8"><span class="text-sm">${s.mode} — ${s.date}</span><span class="score-badge ${cls}">${s.correct}/${s.total} (${pct}%)</span></div>`;
+    });
+  }
+  document.getElementById('progress-display').innerHTML = html;
+}
+
+function clearProgress() {
+  if (confirm('Clear all progress and scores?')) {
+    localStorage.removeItem('nmls_scores');
+    localStorage.removeItem('nmls_wrong');
+    localStorage.removeItem('nmls_scenarios');
+    wrongBank = [];
+    updateProgress();
+  }
+}
+
+// ============================================================
+// FLASHCARDS
+// ============================================================
+function initFlashcards() {
+  const deckNames = Object.keys(flashcardDecks);
+  const btns = document.getElementById('deck-btns');
+  btns.innerHTML = deckNames.map(d => `<button class="deck-btn ${d===currentDeck?'active':''}" onclick="selectDeck('${d}')">${d}</button>`).join('');
+  loadDeck(currentDeck);
+}
+
+function selectDeck(name) {
+  currentDeck = name;
+  fcKnown = new Set();
+  document.querySelectorAll('.deck-btn').forEach(b => b.classList.toggle('active', b.textContent === name));
+  loadDeck(name);
+}
+
+function loadDeck(name) {
+  fcCards = [...flashcardDecks[name]];
+  fcIndex = 0;
+  document.getElementById('fc-card').classList.remove('flipped');
+  renderCard();
+}
+
+function renderCard() {
+  if (!fcCards.length) return;
+  const card = fcCards[fcIndex];
+  document.getElementById('fc-front-text').textContent = card.front;
+  document.getElementById('fc-back-text').textContent = card.back;
+  document.getElementById('fc-counter').textContent = `${fcIndex + 1} / ${fcCards.length}`;
+  const pct = fcKnown.size / flashcardDecks[currentDeck].length * 100;
+  document.getElementById('fc-pbar').style.width = pct + '%';
+  document.getElementById('fc-known').textContent = `${fcKnown.size} known`;
+  document.getElementById('fc-left').textContent = `${fcCards.length - fcIndex - 1} remaining`;
+  document.getElementById('fc-card').classList.remove('flipped');
+}
+
+function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
+
+function fcNav(dir) {
+  fcIndex = Math.max(0, Math.min(fcCards.length - 1, fcIndex + dir));
+  renderCard();
+}
+
+function markCard(known) {
+  if (known) {
+    fcKnown.add(fcIndex);
+    fcCards.splice(fcIndex, 1);
+    if (fcIndex >= fcCards.length) fcIndex = fcCards.length - 1;
+    if (fcIndex < 0) fcIndex = 0;
+  } else {
+    fcNav(1);
+  }
+  if (fcCards.length === 0) {
+    document.getElementById('fc-front-text').textContent = '🎉 Deck Complete!';
+    document.getElementById('fc-back-text').textContent = 'All cards marked as known. Reset to go again.';
+    document.getElementById('fc-counter').textContent = '✓ Done';
+  } else {
+    renderCard();
+  }
+}
+
+function shuffleDeck() {
+  for (let i = fcCards.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fcCards[i], fcCards[j]] = [fcCards[j], fcCards[i]];
+  }
+  fcIndex = 0;
+  renderCard();
+}
+
+function resetDeck() { fcKnown = new Set(); loadDeck(currentDeck); }
+
+// ============================================================
+// QUIZ
+// ============================================================
+function selectQuizMode(el, mode) {
+  quizMode = mode;
+  document.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function startQuiz() {
+  let pool = [];
+  if (quizMode === 'all') pool = [...quizData];
+  else if (quizMode === '25') pool = shuffle([...quizData]).slice(0, 25);
+  else if (quizMode === 'd1') pool = quizData.filter(q => q.domain === 1);
+  else if (quizMode === 'd2') pool = quizData.filter(q => q.domain === 2);
+  else if (quizMode === 'd3') pool = quizData.filter(q => q.domain === 3);
+  else if (quizMode === 'd4') pool = quizData.filter(q => q.domain === 4);
+  else if (quizMode === 'd5') pool = quizData.filter(q => q.domain === 5);
+  else if (quizMode === 'wrong') pool = quizData.filter(q => wrongBank.includes(q.id));
+  if (pool.length === 0) { alert('No questions available for this mode. Complete a quiz first to populate wrong answers.'); return; }
+  quizQueue = shuffle(pool);
+  quizCurrent = 0;
+  quizCorrect = 0;
+  quizWrong = [];
+  document.getElementById('quiz-setup-view').style.display = 'none';
+  document.getElementById('quiz-results-view').style.display = 'none';
+  document.getElementById('quiz-active-view').style.display = 'block';
+  renderQuestion();
+}
+
+function renderQuestion() {
+  if (quizCurrent >= quizQueue.length) { showResults(); return; }
+  const q = quizQueue[quizCurrent];
+  quizAnswered = false;
+  document.getElementById('quiz-domain').textContent = `Domain ${q.domain}: ${q.dn}`;
+  document.getElementById('quiz-q').textContent = q.q;
+  document.getElementById('quiz-prog').textContent = `Q ${quizCurrent + 1} of ${quizQueue.length}`;
+  document.getElementById('quiz-pbar').style.width = (quizCurrent / quizQueue.length * 100) + '%';
+  document.getElementById('quiz-score-live').textContent = `${quizCorrect}/${quizCurrent} correct`;
+  document.getElementById('quiz-explanation').style.display = 'none';
+  document.getElementById('quiz-next-btn').style.display = 'none';
+  const answersEl = document.getElementById('quiz-answers');
+  answersEl.innerHTML = ['A','B','C','D'].map(l =>
+    `<button class="ans-btn" onclick="answerQ('${l}')"><span class="ans-letter">${l}</span><span>${q.opts[l]}</span></button>`
+  ).join('');
+}
+
+function answerQ(letter) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const q = quizQueue[quizCurrent];
+  const correct = q.correct === letter;
+  if (correct) quizCorrect++;
+  else {
+    quizWrong.push(q.id);
+    if (!wrongBank.includes(q.id)) wrongBank.push(q.id);
+    localStorage.setItem('nmls_wrong', JSON.stringify(wrongBank));
+  }
+  document.querySelectorAll('.ans-btn').forEach(btn => {
+    btn.disabled = true;
+    const l = btn.querySelector('.ans-letter').textContent;
+    if (l === q.correct) btn.classList.add('correct');
+    else if (l === letter && !correct) btn.classList.add('wrong');
+  });
+  document.getElementById('quiz-explanation').textContent = q.exp;
+  document.getElementById('quiz-explanation').style.display = 'block';
+  document.getElementById('quiz-next-btn').style.display = 'block';
+}
+
+function nextQuestion() {
+  quizCurrent++;
+  renderQuestion();
+}
+
+function endQuiz() {
+  if (quizCurrent > 0) showResults();
+  else showSetup();
+}
+
+function showResults() {
+  document.getElementById('quiz-active-view').style.display = 'none';
+  document.getElementById('quiz-results-view').style.display = 'block';
+  const total = quizQueue.length;
+  const pct = Math.round(quizCorrect / total * 100);
+  const pass = pct >= 75;
+  document.getElementById('big-score').innerHTML = `<span class="${pass?'score-pass-big':'score-fail-big'}">${pct}%</span><br><span style="font-size:1rem;color:var(--text2)">${quizCorrect} / ${total} correct &nbsp;·&nbsp; ${pass?'✅ Passing':'❌ Below 75%'}</span>`;
+  document.getElementById('results-grid').innerHTML = `
+    <div class="result-box"><div class="result-num text-accent">${quizCorrect}</div><div class="result-label">Correct</div></div>
+    <div class="result-box"><div class="result-num" style="color:var(--danger)">${total - quizCorrect}</div><div class="result-label">Incorrect</div></div>
+    <div class="result-box"><div class="result-num">${pct}%</div><div class="result-label">Score</div></div>
+    <div class="result-box"><div class="result-num">${pass?'✅':'❌'}</div><div class="result-label">${pass?'Passing':'Keep Studying'}</div></div>`;
+  // Domain breakdown
+  const domainNames = {1:'Federal Laws',2:'State Content',3:'General Mortgage',4:'Origination',5:'Ethics'};
+  const byDomain = {};
+  quizQueue.forEach((q,i) => {
+    if (!byDomain[q.domain]) byDomain[q.domain] = {total:0,correct:0,name:q.dn};
+    byDomain[q.domain].total++;
+    if (!quizWrong.includes(q.id)) byDomain[q.domain].correct++;
+  });
+  let domHtml = '<h3 class="mb-8">Domain Breakdown</h3>';
+  Object.entries(byDomain).forEach(([d,v]) => {
+    const p = Math.round(v.correct/v.total*100);
+    const c = p>=75?'var(--success)':'var(--danger)';
+    domHtml += `<div class="flex-between mb-8 text-sm"><span>${v.name}</span><span style="color:${c}">${v.correct}/${v.total} (${p}%)</span></div>`;
+    domHtml += `<div class="pbar-wrap mb-8"><div class="pbar" style="width:${p}%;background:${c}"></div></div>`;
+  });
+  document.getElementById('domain-breakdown').innerHTML = domHtml;
+  // Save score
+  const scores = JSON.parse(localStorage.getItem('nmls_scores') || '[]');
+  const modeLabel = {all:'All 60 Q','25':'Quick 25',d1:'Federal Laws',d2:'State Content',d3:'General Mortgage',d4:'Origination',d5:'Ethics',wrong:'Wrong Answers Review'}[quizMode] || quizMode;
+  scores.push({mode:modeLabel, correct:quizCorrect, total, pct, date: new Date().toLocaleDateString()});
+  if (scores.length > 20) scores.shift();
+  localStorage.setItem('nmls_scores', JSON.stringify(scores));
+}
+
+function showSetup() {
+  document.getElementById('quiz-setup-view').style.display = 'block';
+  document.getElementById('quiz-active-view').style.display = 'none';
+  document.getElementById('quiz-results-view').style.display = 'none';
+  loadPastScores();
+}
+
+function reviewWrong() {
+  quizMode = 'wrong';
+  startQuiz();
+}
+
+function loadPastScores() {
+  const scores = JSON.parse(localStorage.getItem('nmls_scores') || '[]');
+  const el = document.getElementById('past-scores');
+  if (!scores.length) { el.innerHTML = '<p class="text-muted text-sm">No past scores yet.</p>'; return; }
+  el.innerHTML = '<h3 class="mb-8">Recent Scores</h3>' + scores.slice(-5).reverse().map(s => {
+    const cls = s.pct >= 75 ? 'score-pass' : 'score-fail';
+    return `<div class="flex-between mb-8"><span class="text-sm text-muted">${s.mode} · ${s.date}</span><span class="score-badge ${cls}">${s.correct}/${s.total} (${s.pct}%)</span></div>`;
+  }).join('');
+}
+
+// ============================================================
+// SCENARIOS
+// ============================================================
+function renderScenarios(section) {
+  const reviewed = JSON.parse(localStorage.getItem('nmls_scenarios') || '[]');
+  const filtered = section === 'all' ? scenarios : scenarios.filter(s => s.section === section);
+  const list = document.getElementById('scenario-list');
+  const badgeClass = {A:'badge-a',B:'badge-b',C:'badge-c',D:'badge-d',E:'badge-e'};
+  list.innerHTML = filtered.map(s => `
+    <div class="scenario-card" id="sc-${s.id}">
+      <div class="scenario-header" onclick="toggleScenario(${s.id})">
+        <span class="scenario-num">#${s.id}</span>
+        <span class="scenario-badge ${badgeClass[s.section]}">${s.sn}</span>
+        <span class="scenario-text">${s.sit}</span>
+      </div>
+      <div class="scenario-answer" id="sca-${s.id}">
+        <div class="scenario-opts">
+          ${['A','B','C','D'].map(l=>`<div class="s-opt ${l===s.correct?'correct-opt':''}">${l}) ${s.opts[l]}</div>`).join('')}
+        </div>
+        <div class="answer-correct">✅ Correct Answer: ${s.correct}</div>
+        <div class="answer-explain">${s.exp}</div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleScenario(id) {
+  const el = document.getElementById('sca-' + id);
+  el.classList.toggle('open');
+}
+
+function filterScenarios(section, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderScenarios(section);
+}
+
+// ============================================================
+// STUDY GUIDE
+// ============================================================
+function renderGuide() {
+  const el = document.getElementById('session-list');
+  el.innerHTML = sessions.map(s => `
+    <div class="session-item">
+      <div class="session-num">${s.n}</div>
+      <div class="session-info">
+        <h3>${s.title}</h3>
+        <p>${s.desc}</p>
+        <span class="domain-tag ${s.d}">Domain ${s.domain}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('keydown', e => {
+  const activeTab = document.querySelector('.tab.active');
+  if (activeTab && activeTab.id === 'tab-flash') {
+    if (e.key === 'ArrowRight') fcNav(1);
+    if (e.key === 'ArrowLeft') fcNav(-1);
+    if (e.key === ' ') { e.preventDefault(); flipCard(); }
+  }
+});
+
+updateProgress();
+</script>
+</body>
+</html>
