@@ -8,12 +8,12 @@ A personalized study course for the NMLS SAFE Mortgage Loan Originator exam.
 
 | Category | Questions (Scored) | % of Exam |
 |---|---|---|
-| Mortgage Loan Origination Activities | ~29 | 25% |
-| Federal Mortgage-Related Laws | ~26 | 23% |
-| General Mortgage Knowledge | ~26 | 23% |
-| Uniform State Content | ~21 | 18% |
-| Ethics | ~13 | 11% |
-| **Total** | **115 scored + 10 unscored** | **Pass = 75%** |
+| Mortgage Loan Origination Activities | ~31 | 27% |
+| Federal Mortgage-Related Laws | ~28 | 24% |
+| Ethics | ~21 | 18% |
+| General Mortgage Knowledge | ~23 | 20% |
+| Uniform State Content | ~13 | 11% |
+| **Total** | **115 scored + 5 unscored = 120 total** | **Pass = 75%** |
 
 ---
 
