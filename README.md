@@ -1,5 +1,8 @@
 # 📚 NMLS SAFE MLO Exam Study Course
 
+![GitHub tag](https://img.shields.io/github/v/tag/seang1121/Loan-Officer-Exam-Prep-Study-Guide)
+![License](https://img.shields.io/github/license/seang1121/Loan-Officer-Exam-Prep-Study-Guide)
+
 A personalized study course for the NMLS SAFE Mortgage Loan Originator exam.
 
 ---
