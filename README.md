@@ -1,13 +1,17 @@
-# 📚 NMLS SAFE MLO Exam Study Course
+> **Built this study system to pass the NMLS SAFE MLO exam.** 4 study modes, 7-week plan, and every key number you need to memorize.
 
-![GitHub tag](https://img.shields.io/github/v/tag/seang1121/Loan-Officer-Exam-Prep-Study-Guide)
-![License](https://img.shields.io/github/license/seang1121/Loan-Officer-Exam-Prep-Study-Guide)
+# NMLS SAFE MLO Exam Study Course
 
-A personalized study course for the NMLS SAFE Mortgage Loan Originator exam.
+![Topics](https://img.shields.io/badge/topics-5-brightgreen)
+![Questions](https://img.shields.io/badge/questions-120-blue)
+![Pass Score](https://img.shields.io/badge/pass_score-75%25-orange)
+![License](https://img.shields.io/badge/license-MIT-green)
+
+**Who This Is For:** Anyone studying for the NMLS SAFE Mortgage Loan Originator exam who wants a structured, self-paced study system.
 
 ---
 
-## 🎯 Exam Overview
+## Exam Overview
 
 | Category | Questions (Scored) | % of Exam |
 |---|---|---|
@@ -90,4 +94,4 @@ Structured study plans are in `/sessions/` — follow these in order for a compl
 
 ---
 
-*Built for Sean Goudy | Powered by Claw 🦞*
+*Built for Sean Goudy*
